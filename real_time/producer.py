@@ -1,28 +1,48 @@
-import json, urllib.request, time
+import json
+import time
+from kafka import KafkaProducer
+import urllib.request
 
+api_request_limiter = 10
+sleep_time = 10  # in seconds
+
+topic_name = "near_earth_objects"
+kafka_broker = 'kafka:9092'
+
+# Create a Kafka producer
+producer = KafkaProducer(
+    bootstrap_servers=[kafka_broker],
+    value_serializer=lambda m: json.dumps(m).encode('ascii'),
+    buffer_memory=33554432,
+    request_timeout_ms=10000
+)
+
+# Get today's date
 today = time.strftime('%Y-%m-%d', time.gmtime())
-print("Date: " + today)
 
-#Retrieve data about asteroids approaching planet Earth.
-url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=" + today + "&end_date=" + today + "&api_key=vbdXqVkpa9sPqau3R1UWjzFeeHA6iZuD0cKivpFO"
+for i in range(api_request_limiter):
+    
+    # Get the date for the next day
+    date = time.strftime('%Y-%m-%d', time.gmtime(time.time() + 86400))
+    print(f"Getting data for {date}")
 
-response = urllib.request.urlopen(url)
-result = json.loads(response.read())
+    # Retrieve data 
+    url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date={date}&end_date={date}&api_key=vbdXqVkpa9sPqau3R1UWjzFeeHA6iZuD0cKivpFO"
+    response = urllib.request.urlopen(url)
+    result = json.loads(response.read())
 
-print("Today " + str(result["element_count"]) + " asteroids will be passing close to planet Earth:\n")
-asteroids = result["near_earth_objects"]
+    # Parse the JSON data and send it to Kafka
+    asteroids = result["near_earth_objects"]
+    for asteroid in asteroids:
+        for field in asteroids[asteroid]:
+            data = {
+                "asteroid_name": field["name"],
+                "estimated_diameter": round((field["estimated_diameter"]["meters"]["estimated_diameter_min"] + field["estimated_diameter"]["meters"]["estimated_diameter_max"]) / 2, 0),
+                "close_approach_date_time": field["close_approach_data"][0]["close_approach_date_full"],
+                "velocity_km_h": field["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"],
+                "distance_to_earth_km": field["close_approach_data"][0]["miss_distance"]["kilometers"],
+                "is_potentially_hazardous_asteroid": field["is_potentially_hazardous_asteroid"]
+            }
+            producer.send(topic_name, data)
 
-#Parsing all the JSON data:
-for asteroid in asteroids:
-    for field in asteroids[asteroid]:
-        print("Asteroid Name: " + field["name"])
-        print("Estimated Diameter: " + str(round((field["estimated_diameter"]["meters"]["estimated_diameter_min"]+field["estimated_diameter"]["meters"]["estimated_diameter_max"])/2, 0)))
-        print("Close Approach Date & Time: " + field["close_approach_data"][0]["close_approach_date_full"])
-        print("Velocity: " + str(field["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]) + " km/h") 
-        print("Distance to Earth: " + str(field["close_approach_data"][0]["miss_distance"]["kilometers"]) + " km") 
-   
-        if field["is_potentially_hazardous_asteroid"]:   
-          print ("This asteroid could be dangerous to planet Earth!")
-        else:
-          print ("This asteroid poses not threat to planet Earth!")
-        print("--------------------")
+    time.sleep(sleep_time)
