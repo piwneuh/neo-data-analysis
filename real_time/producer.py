@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 import time
 from kafka import KafkaProducer
@@ -9,7 +10,7 @@ sleep_time = 10  # in seconds
 topic_name = "near_earth_objects"
 kafka_broker = 'kafka:9092'
 
-# Create a Kafka producer
+#Create a Kafka producer
 producer = KafkaProducer(
     bootstrap_servers=[kafka_broker],
     value_serializer=lambda m: json.dumps(m).encode('ascii'),
@@ -18,12 +19,12 @@ producer = KafkaProducer(
 )
 
 # Get today's date
-today = time.strftime('%Y-%m-%d', time.gmtime())
+today = datetime.utcnow().date()
 
 for i in range(api_request_limiter):
     
     # Get the date for the next day
-    date = time.strftime('%Y-%m-%d', time.gmtime(time.time() + 86400))
+    date = today + timedelta(days=1)
     print(f"Getting data for {date}")
 
     # Retrieve data 
@@ -44,5 +45,6 @@ for i in range(api_request_limiter):
                 "is_potentially_hazardous_asteroid": field["is_potentially_hazardous_asteroid"]
             }
             producer.send(topic_name, data)
-
+            
+    today = date
     time.sleep(sleep_time)
