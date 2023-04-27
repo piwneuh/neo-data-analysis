@@ -1,11 +1,11 @@
 FROM python:3.9-slim-buster
 
-#RUN apt-get update && apt-get install -y openjdk-11-jre-headless
+COPY producer.py /
 
-RUN pip install kafka-python pyspark influxdb-client
+COPY requirements.txt /
 
-COPY consumer.py /
+RUN pip install -r requirements.txt
 
-#CMD ["python", "/test_consumer.py"]
+#CMD ["python", "/producer.py"]
 
 CMD sleep infinity
