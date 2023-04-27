@@ -32,7 +32,7 @@ https://www.101computing.net/real-time-asteroid-watch/
 
 Download and extract dataset from https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset
 
-## Import data to the HDFS
+## import data to the HDFS
 
 ```
 # Copy the dataset to the namenode container
@@ -42,7 +42,7 @@ $ docker cp ./data/dataset.csv namenode:/
 $ docker exec namenode hdfs dfs -put /dataset.csv /neo/
 ```
 
-## Run python script (run.py)
+## run python script (run.py)
 
 ```
 # Enter the spark-master container
@@ -53,4 +53,11 @@ $ cd /spark/bin
 
 # Run the script
 $ ./spark-submit --packages org.postgresql:postgresql:42.4.0 /spark/batch_processor/run.py
+```
+
+## alternatevly use run-batch.sh script
+
+```
+# Start batch processing
+./run-batch.sh
 ```
