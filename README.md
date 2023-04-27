@@ -28,7 +28,7 @@ https://www.101computing.net/real-time-asteroid-watch/
 
 <br>
 
-# starting the project
+# starting the batch processing
 
 Download and extract dataset from https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset
 
@@ -59,5 +59,21 @@ $ ./spark-submit --packages org.postgresql:postgresql:42.4.0 /spark/batch_proces
 
 ```
 # Start batch processing
-./run-batch.sh
+$ ./run-batch.sh
+```
+
+# starting real-time processing
+
+## using run-real-time.sh script
+
+```
+# start real-time processing
+$ ./run-real-time.sh
+```
+
+## start producer to generate data
+
+```
+# start the data stream
+$ ./run-producer.sh
 ```

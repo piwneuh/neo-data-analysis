@@ -2,9 +2,9 @@ FROM python:3.9-slim-buster
 
 COPY producer.py /
 
-COPY requirements.txt /
+COPY requirements-producer.txt /
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-producer.txt
 
 #CMD ["python", "/producer.py"]
 
