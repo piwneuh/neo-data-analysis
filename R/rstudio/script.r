@@ -2,7 +2,7 @@ library(sparklyr)
 library(dplyr)
 
 # Install
-spark.install()
+spark_install()
 
 # Connect
 sc <- sparklyr::spark_connect(master = "local")
