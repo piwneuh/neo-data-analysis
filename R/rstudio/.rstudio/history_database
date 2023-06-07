@@ -1,0 +1,324 @@
+1686160529137:library(sparklyr)
+1686160529642:library(dplyr)
+1686160529660:# Install
+1686160529660:spark_install()
+1686160565673:# Connect
+1686160565673:sc <- sparklyr::spark_connect(master = "local")
+1686160569637:datasetPath <- "/data/dataset.csv"
+1686160569637:df <- spark_read_csv(sc, name = "my_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686160581401:glimpse(df)
+1686160582170:head(df)
+1686160582736:spark_disconnect(sc)
+1686161627258:# Display column names
+1686161627259:colnames(data)
+1686161630303:# Display summary statistics
+1686161630304:summary(data)
+1686161634525:# Explore data distribution
+1686161634527:hist(data$column_name)
+1686161643488:# Connect
+1686161643489:sc <- sparklyr::spark_connect(master = "local")
+1686161647219:datasetPath <- "/data/dataset.csv"
+1686161649549:df <- spark_read_csv(sc, name = "my_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686161783417:df <- spark_read_csv(sc, name = "my_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686161798877:# Display column names
+1686161798879:colnames(df)
+1686161802481:# Display summary statistics
+1686161802482:summary(df)
+1686161805179:# Explore data distribution
+1686161805180:hist(df$column_name)
+1686162217011:hist(df$diameter)
+1686162323146:hist(diameter)
+1686162501435:# Exploring data
+1686162501436:colnames(df)
+1686162503769:summary(df)
+1686162507031:hist()
+1686162530453:df$diameter
+1686162534647:df$diameter
+1686162673286:# Exploring data
+1686162673287:colSums(df)
+1686162698676:# Exploring data
+1686162698677:colnames(df)
+1686162702456:summary(df)
+1686162905134:selected_df <- df %>%
+1686162905135:select(id, full_name, H, diameter)
+1686162925472:grouped_df <- df %>%
+1686162925473:group_by(class) %>%
+1686162925474:summarise(mean_H = mean(H), max_diameter = max(diameter))
+1686162942975:local_df <- collect(selected_df)
+1686162960851:selected_df
+1686162967083:grouped_df
+1686162979728:local_df
+1686163154975:# Classification
+1686163154977:library(caret)
+1686163172763:# Split the data into training and testing sets
+1686163172763:set.seed(123)  # For reproducibility
+1686163204158:train_indices <- createdfPartition(df$target_variable, p = 0.7, list = FALSE)
+1686163208629:# Classification
+1686163208630:library(caret)
+1686163273513:# Classification
+1686163273514:# Install and load required packages
+1686163273514:install.packages("mlr")
+1686163532224:library(mlr)
+1686163532225:set.seed(123)
+1686163532225:train_indices <- sample(1:nrow(df), 0.7 * nrow(df))
+1686163532244:training_set <- df[train_indices, ]
+1686163532244:testing_set <- df[-train_indices, ]
+1686163532245:train_indices <- sample(1:nrow(df), 0.7 * nrow(df))
+1686163532262:training_set <- df[train_indices, ]
+1686163532262:testing_set <- df[-train_indices, ]
+1686163532263:training_set
+1686163532263:testing_set
+1686163532263:trained_model1 <- train(model1, training_set)
+1686163532264:trained_model2 <- train(model2, training_set)
+1686163532264:trained_model3 <- train(model3, training_set)
+1686163532264:trained_model4 <- train(model4, training_set)
+1686163532265:trained_model5 <- train(model5, training_set)
+1686163532265:# Define the classification models
+1686163532265:model1 <- makeLearner("classif.logreg")
+1686163532265:model2 <- makeLearner("classif.rpart")
+1686163532266:model3 <- makeLearner("classif.randomForest")
+1686163532266:model4 <- makeLearner("classif.svm")
+1686163532266:model5 <- makeLearner("classif.naiveBayes")
+1686163532266:# Train the models
+1686163532267:trained_model1 <- train(model1, training_set)
+1686163532267:trained_model2 <- train(model2, training_set)
+1686163532268:trained_model3 <- train(model3, training_set)
+1686163532268:trained_model4 <- train(model4, training_set)
+1686163532268:trained_model5 <- train(model5, training_set)
+1686163532268:# Make predictions on the testing set
+1686163532269:predictions1 <- predict(trained_model1, newdata = testing_set)
+1686163532269:predictions2 <- predict(trained_model2, newdata = testing_set)
+1686163532269:predictions3 <- predict(trained_model3, newdata = testing_set)
+1686163532270:predictions4 <- predict(trained_model4, newdata = testing_set)
+1686163532270:predictions5 <- predict(trained_model5, newdata = testing_set)
+1686163532270:# Evaluate the models
+1686163532270:eval1 <- performance(predictions1, measures = list(acc))
+1686163532271:eval2 <- performance(predictions2, measures = list(acc))
+1686163532271:eval3 <- performance(predictions3, measures = list(acc))
+1686163532271:eval4 <- performance(predictions4, measures = list(acc))
+1686163532272:eval5 <- performance(predictions5, measures = list(acc))
+1686163532272:performance <- data.frame(
+1686163532272:Model = c("Model 1", "Model 2", "Model 3", "Model 4", "Model 5"),
+1686163532272:Accuracy = c(eval1$results$acc, eval2$results$acc, eval3$results$acc, eval4$results$acc, eval5$results$acc)
+1686163532272:)
+1686163532273:performance
+1686163532273:# Classification
+1686163532274:library(caret)
+1686163532275:# Classification
+1686163532275:library(caret)
+1686163532275:library(caret)
+1686163691656:install.packages("caret")
+1686163873791:selected_df
+1686163873999:selected_df
+1686163913098:# Classification
+1686163913100:library(caret)
+1686163924066:# End the session
+1686163924067:spark_disconnect(sc)
+1686163999942:library(sparklyr)
+1686163999943:library(dplyr)
+1686163999944:# Install
+1686163999944:spark_install()
+1686163999962:# Connect
+1686163999963:sc <- sparklyr::spark_connect(master = "local")
+1686164003890:dfsetPath <- "/df/dfset.csv"
+1686164003891:df <- spark_read_csv(sc, name = "my_df", path = dfsetPath, header = TRUE, infer_schema = TRUE)
+1686164007037:# End the session
+1686164007037:spark_disconnect(sc)
+1686164053422:# End the session
+1686164053423:spark_disconnect(sc)
+1686164127467:library(sparklyr)
+1686164127468:library(dplyr)
+1686164127469:# Install
+1686164127470:spark_install()
+1686164127523:# Connect
+1686164127524:sc <- sparklyr::spark_connect(master = "local")
+1686164131272:datasetPath <- "/data/dataset.csv"
+1686164131272:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686164142071:# End the session
+1686164142072:spark_disconnect(sc)
+1686164143917:df
+1686164267080:library(sparklyr)
+1686164267080:library(dplyr)
+1686164267081:# Install
+1686164267082:spark_install()
+1686164267125:# Connect
+1686164267125:sc <- sparklyr::spark_connect(master = "local")
+1686164269445:datasetPath <- "/data/dataset.csv"
+1686164269445:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686164270375:df
+1686164271380:# End the session
+1686164271380:spark_disconnect(sc)
+1686164271381:spark_disconnect(sc)
+1686164271383:library(sparklyr)
+1686164271383:library(dplyr)
+1686164271383:# Install
+1686164271383:spark_install()
+1686164271404:# Connect
+1686164271404:sc <- sparklyr::spark_connect(master = "local")
+1686164272838:datasetPath <- "/data/dataset.csv"
+1686164272838:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686164273846:# Display data
+1686164273846:glimpse(df)
+1686164274861:head(df)
+1686164275876:# Exploring data
+1686164275877:colnames(df)
+1686164275879:summary(df)
+1686164275881:# Select specific columns
+1686164275881:selected_df <- df %>%
+1686164275882:select(id, full_name, H, diameter)
+1686164275884:selected_df
+1686164276906:# Group by a column and compute aggregate functions
+1686164276907:grouped_df <- df %>%
+1686164276908:group_by(class) %>%
+1686164276908:summarise(mean_H = mean(H), max_diameter = max(diameter))
+1686164276911:grouped_df
+1686164277937:# Collect the resulting data to the local R environment
+1686164277938:local_df <- collect(selected_df)
+1686164278964:local_df
+1686164278991:spark_disconnect(sc)
+1686164278993:# Connect
+1686164278994:sc <- sparklyr::spark_connect(master = "local")
+1686164281394:# Connect
+1686164281395:sc <- sparklyr::spark_connect(master = "local")
+1686164283791:sc <- sparklyr::spark_connect(master = "local")
+1686164288930:ddd
+1686164293564:4 + 5
+1686164304569:spark_disconnect(sc)
+1686164310980:4-5
+1686164335547:library(sparklyr)
+1686164335549:library(dplyr)
+1686164335549:# Install
+1686164335550:spark_install()
+1686164335571:# Connect
+1686164335571:sc <- sparklyr::spark_connect(master = "local")
+1686164338806:datasetPath <- "/data/dataset.csv"
+1686164338806:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686164349476:# Display data
+1686164349477:glimpse(df)
+1686164350196:head(df)
+1686164350904:# Exploring data
+1686164350904:colnames(df)
+1686164350905:summary(df)
+1686164350906:# Select specific columns
+1686164350906:selected_df <- df %>%
+1686164350907:select(id, full_name, H, diameter)
+1686164350908:selected_df
+1686164351211:# Group by a column and compute aggregate functions
+1686164351211:grouped_df <- df %>%
+1686164351212:group_by(class) %>%
+1686164351212:summarise(mean_H = mean(H), max_diameter = max(diameter))
+1686164351214:grouped_df
+1686164351876:# Collect the resulting data to the local R environment
+1686164351876:local_df <- collect(selected_df)
+1686164355056:local_df
+1686164355066:spark_disconnect(sc)
+1686164848637:library(sparklyr)
+1686164848639:library(dplyr)
+1686164848639:# Install
+1686164848639:spark_install()
+1686164848658:# Connect
+1686164848658:sc <- sparklyr::spark_connect(master = "local")
+1686164851894:datasetPath <- "/data/dataset.csv"
+1686164851894:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686164862896:df
+1686164863678:# End the session
+1686164863679:spark_disconnect(sc)
+1686165332601:library(sparklyr)
+1686165332602:library(dplyr)
+1686165332603:# Install
+1686165332603:spark_install()
+1686165332624:# Connect
+1686165332625:sc <- sparklyr::spark_connect(master = "local")
+1686165335767:datasetPath <- "/data/dataset.csv"
+1686165335767:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686165347792:# Sanity
+1686165347792:glimpse(df)
+1686165348561:# Comparison of classification models with different parameter values
+1686165348561:model_params <- list(
+1686165348562:list(param1 = value1),
+1686165348562:list(param1 = value2),
+1686165348562:...
+1686165348562:)
+1686165348563:# Define a function to create and evaluate classification models
+1686165348563:evaluate_classification_model <- function(params) {
+1686165348564:# Create the classification model with the specified parameter values
+1686165348564:model <- spark.ml.function_to_create_model(params)
+1686165348564:# Split the data into training and testing sets
+1686165348564:splits <- randomSplit(df, c(0.7, 0.3), seed = 123)
+1686165348564:training_set <- splits[[1]]
+1686165348565:testing_set <- splits[[2]]
+1686165348565:# Fit the model on the training set
+1686165348565:trained_model <- ml.fit(model, training_set)
+1686165348565:# Make predictions on the testing set
+1686165348566:predictions <- ml.transform(trained_model, testing_set)
+1686165348566:# Calculate performance metrics (e.g., accuracy, precision, recall, F1-score)
+1686165348566:performance <- ml.function_to_calculate_performance(predictions)
+1686165348567:# Return the performance metrics
+1686165348567:return(performance)
+1686165348567:}
+1686165348568:# Perform comparison of classification models with different parameter values
+1686165348568:for (params in model_params) {
+1686165348568:performance <- evaluate_classification_model(params)
+1686165348568:print(performance)
+1686165348568:}
+1686165348571:# Comparison of classification models with different types
+1686165348571:model_types <- list("model_type1", "model_type2", ...)
+1686165348571:# Define a function to create and evaluate classification models
+1686165348572:evaluate_classification_model_type <- function(model_type) {
+1686165348572:# Create the classification model of the specified type
+1686165348572:model <- spark.ml.function_to_create_model_type(model_type)
+1686165348572:# Split the data into training and testing sets
+1686165348572:splits <- randomSplit(df, c(0.7, 0.3), seed = 123)
+1686165348573:training_set <- splits[[1]]
+1686165348573:testing_set <- splits[[2]]
+1686165348573:# Fit the model on the training set
+1686165348573:trained_model <- ml.fit(model, training_set)
+1686165348574:# Make predictions on the testing set
+1686165348574:predictions <- ml.transform(trained_model, testing_set)
+1686165348574:# Calculate performance metrics (e.g., accuracy, precision, recall, F1-score)
+1686165348575:performance <- ml.function_to_calculate_performance(predictions)
+1686165348575:# Return the performance metrics
+1686165348576:return(performance)
+1686165348576:}
+1686165348576:# Perform comparison of classification models with different types
+1686165348577:for (model_type in model_types) {
+1686165348577:performance <- evaluate_classification_model_type(model_type)
+1686165348577:print(performance)
+1686165348577:}
+1686165348580:# Clustering analysis with different parameter values
+1686165348580:clustering_params <- list(
+1686165348580:list(param1 = value1),
+1686165348580:list(param1 = value2),
+1686165348580:...
+1686165348580:)
+1686165348581:# Define a function to perform clustering analysis
+1686165348581:perform_clustering <- function(params) {
+1686165348581:# Perform clustering with the specified parameter values
+1686165348581:clusters <- spark.ml.function_to_perform_clustering(params)
+1686165348582:# Analyze and interpret the obtained clusters
+1686165348582:analysis <- spark.ml.function_to_analyze_clusters(clusters)
+1686165348582:# Return the analysis results
+1686165348583:return(analysis)
+1686165348583:}
+1686165348583:# Perform clustering analysis with different parameter values
+1686165348583:for (params in clustering_params) {
+1686165348584:analysis <- perform_clustering(params)
+1686165348584:print(analysis)
+1686165348584:}
+1686165348586:# Generate the analytical report
+1686165348586:report <- create_report(df, model_params, model_types, clustering_params)
+1686165348586:save_report(report, "report.pdf")
+1686165348587:# End the session
+1686165348587:spark_disconnect(sc)
+1686165639283:library(sparklyr)
+1686165639285:library(dplyr)
+1686165639286:# Install
+1686165639286:#spark_install()
+1686165639287:# Connect
+1686165639287:sc <- sparklyr::spark_connect(master = "local")
+1686165642450:datasetPath <- "/data/dataset.csv"
+1686165642450:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1686165653528:# Sanity
+1686165653528:glimpse(df)
+1686165654246:# End the session
+1686165654246:spark_disconnect(sc)
