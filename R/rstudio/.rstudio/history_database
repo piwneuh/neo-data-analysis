@@ -1756,3 +1756,146 @@
 1689187221164:result
 1689187238457:result$weighted_f_measure()
 1689187251541:result$accuracy()
+1689187412100:# Regression
+1689187412101:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 1, family = "binomial")
+1689187416159:# Evaluate the model
+1689187416160:result <- ml_evaluate(model1, df_split$test)
+1689187418384:result$accuracy()
+1689187444294:View(result)
+1689187496010:result$weighted_precision()
+1689187500099:# Regression
+1689187500100:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689187502156:# Evaluate the model
+1689187502157:result <- ml_evaluate(model1, df_split$test)
+1689187506561:result$weighted_precision()
+1689187547757:# Formula
+1689187547758:formula <- can_be_seen ~ H + H_divd + diameter
+1689187550422:# Regression
+1689187550423:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689187553009:# Evaluate the model
+1689187553010:result <- ml_evaluate(model1, df_split$test)
+1689187554661:result$weighted_precision()
+1689187573496:# Regression
+1689187573497:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 1, family = "binomial")
+1689187576161:# Evaluate the model
+1689187576163:result <- ml_evaluate(model1, df_split$test)
+1689187577722:result$weighted_precision()
+1689187584486:# Formula
+1689187584487:formula <- can_be_seen ~ H + H_divd + diameter
+1689187586309:# Regression
+1689187586311:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 1, family = "binomial")
+1689187588366:# Evaluate the model
+1689187588367:result <- ml_evaluate(model1, df_split$test)
+1689187590492:result$weighted_precision()
+1689187597994:+ albedo
+1689187600732:# Formula
+1689187600732:formula <- can_be_seen ~ H + H_divd + diameter + albedo
+1689187602903:# Regression
+1689187602905:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689187604975:# Evaluate the model
+1689187604976:result <- ml_evaluate(model1, df_split$test)
+1689187605907:result$weighted_precision()
+1689187609540:# Regression
+1689187609542:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 1, family = "binomial")
+1689187611913:# Evaluate the model
+1689187611915:result <- ml_evaluate(model1, df_split$test)
+1689187614105:result$weighted_precision()
+1689187620296:# Regression
+1689187620297:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 3, family = "binomial")
+1689187622409:# Evaluate the model
+1689187622409:result <- ml_evaluate(model1, df_split$test)
+1689187625701:result$weighted_precision()
+1689188389989:#
+1689188389990:max_iterations <- 5
+1689188391078:results <- c()
+1689188457256:for(i in max_iterations){
+1689188457257:# Regression
+1689188457257:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188457258:# Evaluate the model
+1689188457259:result <- ml_evaluate(model, df_split$test)
+1689188457260:# Save results
+1689188457260:result[i] <- result
+1689188457260:}
+1689188531642:for(i in max_iterations){
+1689188531643:# Regression
+1689188531643:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188531644:# Evaluate the model
+1689188531645:result <- ml_evaluate(model, df_split$test)
+1689188531646:# Save results
+1689188531646:results[i] <- result
+1689188531647:}
+1689188628977:results <- vector(,max_iterations)
+1689188631755:for(i in max_iterations){
+1689188631757:# Regression
+1689188631757:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188631758:# Evaluate the model
+1689188631759:result <- ml_evaluate(model, df_split$test)
+1689188631760:# Save results
+1689188631760:results[i] <- result
+1689188631761:}
+1689188673449:results <- c()
+1689188676206:for(i in max_iterations){
+1689188676206:# Regression
+1689188676207:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188676207:# Evaluate the model
+1689188676207:result <- ml_evaluate(model, df_split$test)
+1689188676208:# Save results
+1689188676208:results[i] <- result
+1689188676208:}
+1689188750191:# Regression
+1689188750193:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188755522:# Evaluate the model
+1689188755523:result <- ml_evaluate(model, df_split$test)
+1689188759122:# Save results
+1689188759123:results[i] <- result
+1689188776658:result$accuracy()
+1689188792932:for(i in max_iterations){
+1689188792933:# Regression
+1689188792934:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689188792935:# Evaluate the model
+1689188792935:result <- ml_evaluate(model, df_split$test)
+1689188792936:# Save results
+1689188792937:results[i] <- result
+1689188792937:}
+1689188797379:results[i]$accuracy
+1689189090119:for(i in max_iterations){
+1689189090121:i
+1689189090121:}
+1689189097757:for(i in max_iterations){
+1689189097758:print(i)
+1689189097759:}
+1689189144593:for(i in 1:max_iterations){
+1689189144595:print(i)
+1689189144595:}
+1689189179874:for(i in 1:max_iterations){
+1689189179875:# Regression
+1689189179876:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689189179877:# Evaluate the model
+1689189179877:result <- ml_evaluate(model, df_split$test)
+1689189179878:# Save results
+1689189179879:results[i] <- result
+1689189179879:}
+1689189206420:results[i]$accuracy()
+1689189378227:for (i in 1:max_iterations) {
+1689189378228:# Create logistic regression estimator
+1689189378229:estimator <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689189378230:# Train the model
+1689189378230:model <- ml_fit(estimator, df_split$training)
+1689189378231:# Evaluate the model
+1689189378232:result <- ml_evaluate(model, df_split$test)
+1689189378233:# Save results
+1689189378233:results[[i]] <- result
+1689189378234:}
+1689189406352:# Traing the model
+1689189406352:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689189411010:for (i in 1:max_iterations) {
+1689189411012:# Traing the model
+1689189411012:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689189411013:# Evaluate the model
+1689189411014:result <- ml_evaluate(model, df_split$test)
+1689189411015:# Save results
+1689189411016:results[[i]] <- result
+1689189411016:}
+1689189436499:results[[1]]$accuracy()
+1689189446039:results[[1]]$weighted_precision()
+1689189479575:results[[1]]$weighted_recall()

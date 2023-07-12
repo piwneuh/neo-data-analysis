@@ -80,13 +80,23 @@ df_split
 # Formula
 formula <- can_be_seen ~ H + H_divd + diameter + albedo
 
-# Regression
-model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+# Logistic regression with different max iterations
+max_iterations <- 5
+results <- vector("list", max_iterations)
 
-# Evaluate the model
-result <- ml_evaluate(model1, df_split$test)
+for (i in 1:max_iterations) {
+  
+  # Traing the model
+  model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+  
+  # Evaluate the model
+  result <- ml_evaluate(model, df_split$test)
+  
+  # Save results
+  results[[i]] <- result
+}
 
-result$accuracy()
+results[[1]]$weighted_recall()
 
 # End the session
 #spark_disconnect(sc)
