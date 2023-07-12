@@ -1543,3 +1543,216 @@
 1689185301301:formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
 1689185306265:# Regression
 1689185306266:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689185347954:# Check the split out
+1689185347955:df_split
+1689185880825:datasetPath <- "/data/dataset.csv"
+1689185881737:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689185926279:# Connect
+1689185926280:sc <- sparklyr::spark_connect(master = "local")
+1689185929639:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689185938385:# Filter data
+1689185938386:df <- df %>%
+1689185938387:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
+1689185938388:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689185940769:# Check how much is lost
+1689185940770:count(df)
+1689185945776:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689185945778:df <- df %>%
+1689185945778:mutate(brightness = case_when(
+1689185945779:H < 20 ~ "Can't be seen",
+1689185945779:H >= 15 & H < 20 ~ "Moderately Bright",
+1689185945780:TRUE ~ "Can't be seen"
+1689185945780:))
+1689185948160:# Create a new column
+1689185948162:df <- df %>%
+1689185948162:mutate(can_be_seen = case_when(
+1689185948163:H < 20 ~ 0,
+1689185948163:H >= 20 ~ 1,
+1689185948164:TRUE ~ 0
+1689185948164:))
+1689185951030:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689185951031:df <- df %>%
+1689185951032:mutate(size_category = case_when(
+1689185951032:diameter < 1 ~ "Small",
+1689185951033:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689185951033:diameter > 10 ~ "Large",
+1689185951034:TRUE ~ "Unknown"
+1689185951034:))
+1689185954111:# H devided by 5 (needed for formula)
+1689185954113:df <- df %>%
+1689185954113:mutate(H_divd = H / 5)
+1689185956158:# Sanity columns
+1689185956159:colnames(df)
+1689185961896:# Select most relevant data for further analising
+1689185961897:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689185964452:# Just in case
+1689185964454:df <- na.omit(df)
+1689185968288:# Show selected data
+1689185968289:kable(head(df, n = 10L),
+1689185968290:col.names = colnames(df),
+1689185968290:caption = "Table view of filtered data",
+1689185968291:format = "html",
+1689185968291:align = "c"
+1689185968292:)
+1689186048800:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689186055213:# Filter data
+1689186055215:df <- df %>%
+1689186055215:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
+1689186055216:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689186057040:# Check how much is lost
+1689186057041:count(df)
+1689186061315:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689186061317:df <- df %>%
+1689186061317:mutate(brightness = case_when(
+1689186061318:H < 20 ~ "Can't be seen",
+1689186061318:H >= 20 ~ "Moderately Bright",
+1689186061319:TRUE ~ "Can't be seen"
+1689186061319:))
+1689186063193:# Create a new column
+1689186063195:df <- df %>%
+1689186063195:mutate(can_be_seen = case_when(
+1689186063196:H < 20 ~ 0,
+1689186063196:H >= 20 ~ 1,
+1689186063197:TRUE ~ 0
+1689186063197:))
+1689186065662:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689186065664:df <- df %>%
+1689186065664:mutate(size_category = case_when(
+1689186065665:diameter < 1 ~ "Small",
+1689186065665:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689186065665:diameter > 10 ~ "Large",
+1689186065666:TRUE ~ "Unknown"
+1689186065666:))
+1689186068673:# H devided by 5 (needed for formula)
+1689186068674:df <- df %>%
+1689186068675:mutate(H_divd = H / 5)
+1689186069887:# Sanity columns
+1689186069889:colnames(df)
+1689186071777:# Select most relevant data for further analising
+1689186071779:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689186074950:# Just in case
+1689186074952:df <- na.omit(df)
+1689186080149:# Show selected data
+1689186080150:kable(head(df, n = 10L),
+1689186080151:col.names = colnames(df),
+1689186080152:caption = "Table view of filtered data",
+1689186080152:format = "html",
+1689186080153:align = "c"
+1689186080153:)
+1689186276024:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689186284994:# Filter data
+1689186284995:df <- df %>%
+1689186284996:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
+1689186284997:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689186287299:# Check how much is lost
+1689186287301:count(df)
+1689186289133:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689186289134:df <- df %>%
+1689186289134:mutate(brightness = case_when(
+1689186289135:albedo < 0.25 ~ "Can't be seen",
+1689186289136:albedo >= 0.25 ~ "Moderately Bright",
+1689186289136:TRUE ~ "Can't be seen"
+1689186289137:))
+1689186295256:# Create a new column
+1689186295258:df <- df %>%
+1689186295258:mutate(can_be_seen = case_when(
+1689186295259:albedo < 0.25 ~ 0,
+1689186295259:albedo >= 0.25 ~ 1,
+1689186295260:TRUE ~ 0
+1689186295260:))
+1689186297177:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689186297179:df <- df %>%
+1689186297180:mutate(size_category = case_when(
+1689186297180:diameter < 1 ~ "Small",
+1689186297181:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689186297181:diameter > 10 ~ "Large",
+1689186297182:TRUE ~ "Unknown"
+1689186297182:))
+1689186299372:# H devided by 5 (needed for formula)
+1689186299374:df <- df %>%
+1689186299374:mutate(H_divd = H / 5)
+1689186300707:# Sanity columns
+1689186300709:colnames(df)
+1689186303972:# Select most relevant data for further analising
+1689186303973:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689186306355:# Just in case
+1689186306357:df <- na.omit(df)
+1689186310452:# Show selected data
+1689186310454:kable(head(df, n = 10L),
+1689186310455:col.names = colnames(df),
+1689186310455:caption = "Table view of filtered data",
+1689186310456:format = "html",
+1689186310456:align = "c"
+1689186310457:)
+1689186371100:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689186377561:# Filter data
+1689186377562:df <- df %>%
+1689186377563:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
+1689186377563:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689186379225:# Check how much is lost
+1689186379226:count(df)
+1689186380710:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689186380712:df <- df %>%
+1689186380712:mutate(brightness = case_when(
+1689186380713:albedo < 0.25 ~ "Can't be seen",
+1689186380713:albedo >= 0.25 ~ "Moderately Bright",
+1689186380714:TRUE ~ "Can't be seen"
+1689186380714:))
+1689186383038:# Create a new column
+1689186383040:df <- df %>%
+1689186383040:mutate(can_be_seen = case_when(
+1689186383041:albedo < 0.25 ~ 0,
+1689186383041:albedo >= 0.25 ~ 1,
+1689186383042:TRUE ~ 0
+1689186383042:))
+1689186385727:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689186385728:df <- df %>%
+1689186385729:mutate(size_category = case_when(
+1689186385730:diameter < 1 ~ "Small",
+1689186385730:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689186385731:diameter > 10 ~ "Large",
+1689186385731:TRUE ~ "Unknown"
+1689186385732:))
+1689186387515:# H devided by 5 (needed for formula)
+1689186387517:df <- df %>%
+1689186387518:mutate(H_divd = H / 5)
+1689186388787:# Sanity columns
+1689186388788:colnames(df)
+1689186391026:# Select most relevant data for further analising
+1689186391026:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_seen, brightness, size_category)
+1689186393906:# Just in case
+1689186393907:df <- na.omit(df)
+1689186396787:# Show selected data
+1689186396789:kable(head(df, n = 10L),
+1689186396789:col.names = colnames(df),
+1689186396790:caption = "Table view of filtered data",
+1689186396790:format = "html",
+1689186396790:align = "c"
+1689186396791:)
+1689186444423:# Data split
+1689186444425:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689186446377:# Check the split out
+1689186446378:df_split
+1689186452846:# Formula
+1689186452847:formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
+1689186456255:# Regression
+1689186456257:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689186643866:# Formula
+1689186643867:formula <- can_be_seen ~ H + H_divd + diameter + albedo
+1689186654554:# Regression
+1689186654555:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689186661270:# Traing the model
+1689186661270:m1 <- ml_fit(model1, df_split$training)
+1689186680620:View(model1)
+1689187104796:# Regression
+1689187104797:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689187175784:# Evaluate the model
+1689187175785:result <- ml_evaluate(model1, data_split$test)
+1689187184908:# Evaluate the model
+1689187184910:result <- ml_evaluate(model1, df_split$test)
+1689187192567:result
+1689187207824:ml_summart(result)
+1689187213012:ml_summary(result)
+1689187221164:result
+1689187238457:result$weighted_f_measure()
+1689187251541:result$accuracy()

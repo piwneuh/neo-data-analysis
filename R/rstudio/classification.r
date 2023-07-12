@@ -1,6 +1,4 @@
 install.packages("tidyverse", repos = "https://cran.rstudio.com/")
-install.packages("gridExtra", repos = "https://cran.rstudio.com/")
-install.packages("kableExtra", repos = "https://cran.rstudio.com/")
 install.packages("sparklyr", repos="https://cran.rstudio.com")
 
 library(sparklyr)
@@ -21,10 +19,7 @@ df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, i
 
 # Filter data
 df <- df %>%
-  filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma)))
-
-
-df <- df %>%
+  filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
   mutate(albedo = ifelse(is.na(albedo), 0, albedo))
 
 # Check how much is lost
@@ -33,9 +28,17 @@ count(df)
 # Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
 df <- df %>%
   mutate(brightness = case_when(
-    H < 15 ~ "Very Bright",
-    H >= 15 & H < 20 ~ "Moderately Bright",
-    TRUE ~ "Dim"
+    albedo < 0.25 ~ "Can't be seen",
+    albedo >= 0.25 ~ "Moderately Bright",
+    TRUE ~ "Can't be seen"
+  ))
+
+# Create a new column 
+df <- df %>%
+  mutate(can_be_seen = case_when(
+    albedo < 0.25 ~ 0,
+    albedo >= 0.25 ~ 1,
+    TRUE ~ 0
   ))
 
 # Create a new column that categorizes asteroids into different size categories based on their diameter (km)
@@ -45,7 +48,7 @@ df <- df %>%
     diameter >= 1 & diameter <= 10 ~ "Medium",
     diameter > 10 ~ "Large",
     TRUE ~ "Unknown"
-  ))
+    ))
 
 # H devided by 5 (needed for formula)
 df <- df %>%
@@ -55,7 +58,7 @@ df <- df %>%
 colnames(df)
 
 # Select most relevant data for further analising
-df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_seen, brightness, size_category)
 
 # Just in case
 df <- na.omit(df)
@@ -75,16 +78,15 @@ df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
 df_split
 
 # Formula
-formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
+formula <- can_be_seen ~ H + H_divd + diameter + albedo
 
 # Regression
 model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
 
-# Traing the model
-m1 <- ml_fit(model1, df_split$training)
-
 # Evaluate the model
-result <- ml_evaluate(model1, data_split$test)
+result <- ml_evaluate(model1, df_split$test)
+
+result$accuracy()
 
 # End the session
 #spark_disconnect(sc)
