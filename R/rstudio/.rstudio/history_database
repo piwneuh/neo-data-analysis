@@ -322,3 +322,92 @@
 1686165653528:glimpse(df)
 1686165654246:# End the session
 1686165654246:spark_disconnect(sc)
+1689160715882:library(sparklyr)
+1689160716890:library(dplyr)
+1689160716926:# Install
+1689160716927:spark_install()
+1689160717480:# Connect
+1689160717480:sc <- sparklyr::spark_connect(master = "local")
+1689160723003:datasetPath <- "/data/dataset.csv"
+1689160723004:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689160735584:# Display data
+1689160735584:glimpse(df)
+1689160736356:head(df)
+1689160736985:# Exploring data
+1689160736985:colnames(df)
+1689160736986:summary(df)
+1689160736987:# Select specific columns
+1689160736987:selected_df <- df %>%
+1689160736987:select(id, full_name, H, diameter)
+1689160736990:selected_df
+1689160737286:# Group by a column and compute aggregate functions
+1689160737286:grouped_df <- df %>%
+1689160737286:group_by(class) %>%
+1689160737287:summarise(mean_H = mean(H), max_diameter = max(diameter))
+1689160737290:grouped_df
+1689160738040:# Collect the resulting data to the local R environment
+1689160738040:local_df <- collect(selected_df)
+1689160741783:local_df
+1689160741793:spark_disconnect(sc)
+1689160916482:# Connect
+1689160916484:sc <- sparklyr::spark_connect(master = "local")
+1689160922028:datasetPath <- "/data/dataset.csv"
+1689160922028:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689160934091:# Sanity
+1689160934091:glimpse(df)
+1689161687334:df_cleaned <- df %>%
+1689161687335:filter(!is.na(column_name))
+1689161701932:glimpse(df_cleaned)
+1689161936868:install.packages("tidyverse")
+1689162016901:install.packages("tidyverse", repos = "https://cran.rstudio.com/")
+1689162396737:library(tidyr)
+1689162408758:install.packages("gridExtra")
+1689162434182:install.packages("gridExtra", repos = "https://cran.rstudio.com/")
+1689162482052:install.packages("kableExtra", repos = "https://cran.rsduio.com/")
+1689162507508:install.packages("kableExtra", repos = "https://cran.rsdtuio.com/")
+1689162558565:library(sparklyr)
+1689162559088:library(dplyr)
+1689162559103:library(tidyr)
+1689162559103:library(ggplot2)
+1689162559460:library(magrittr)
+1689162559472:library(knitr)
+1689162559501:library(kableExtra)
+1689162559503:library(cowplot)
+1689162601574:# Install
+1689162601592:spark_install()
+1689162614129:# Sanity
+1689162614147:glimpse(df)
+1689162625814:# End the session
+1689162625815:spark_disconnect(sc)
+1689162631555:# Connect
+1689162631557:sc <- sparklyr::spark_connect(master = "local")
+1689162645844:datasetPath <- "/data/dataset.csv"
+1689162648445:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689162664391:# Sanity
+1689162664392:glimpse(df)
+1689162691037:# Columns
+1689162691037:colnames(df)
+1689162821513:df <- df %>%
+1689162821515:mutate(abs_mag_category = case_when(
+1689162821516:H < 15 ~ "Very Bright",
+1689162821516:H >= 15 & H < 20 ~ "Moderately Bright",
+1689162821517:TRUE ~ "Dim"
+1689162821517:))
+1689162840213:# Create a new column that categorizes asteroids into different orbit class categories based on their orbit class
+1689162840231:df <- df %>%
+1689162840231:mutate(orbit_class_category = case_when(
+1689162840232:startsWith(orbit_id, "M") ~ "Main Belt",
+1689162840232:startsWith(orbit_id, "O") ~ "Outer Solar System",
+1689162840233:startsWith(orbit_id, "I") ~ "Inner Solar System",
+1689162840234:TRUE ~ "Unknown"
+1689162840234:))
+1689162844484:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689162844485:df <- df %>%
+1689162844486:mutate(size_category = case_when(
+1689162844486:diameter < 1 ~ "Small",
+1689162844487:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689162844488:diameter > 10 ~ "Large",
+1689162844488:TRUE ~ "Unknown"
+1689162844489:))
+1689162867839:# Sanity columns
+1689162867841:colnames(df)
