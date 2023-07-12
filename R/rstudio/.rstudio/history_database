@@ -954,3 +954,69 @@
 1689176125903:format = "html",
 1689176125903:align = "c"
 1689176125904:)
+1689176258705:# Data split
+1689176258706:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689176262159:# Check the split out
+1689176262160:df_split
+1689176358555:# Check the split out
+1689176358556:print(df_split, n=100)
+1689176367643:# Check the split out
+1689176367645:print(df_split,100)
+1689176379186:# Check the split out
+1689176379186:df
+1689176424894:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689176447768:# Filter data
+1689176447769:df <- df %>%
+1689176447769:filter(!(is.na(diameter_sigma) ||
+1689176447770:is.na(albedo) ||
+1689176447770:is.na(H) ||
+1689176447771:is.na(diameter)||
+1689176447771:is.na(epoch) ||
+1689176447772:is.na(name)
+1689176447772:))
+1689176450705:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689176450706:df <- df %>%
+1689176450707:mutate(brightness = case_when(
+1689176450708:H < 15 ~ "Very Bright",
+1689176450708:H >= 15 & H < 20 ~ "Moderately Bright",
+1689176450709:TRUE ~ "Dim"
+1689176450709:))
+1689176453708:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689176453710:df <- df %>%
+1689176453710:mutate(size_category = case_when(
+1689176453711:diameter < 1 ~ "Small",
+1689176453711:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689176453712:diameter > 10 ~ "Large",
+1689176453712:TRUE ~ "Unknown"
+1689176453713:))
+1689176457546:# H devided by 5 (needed for formula)
+1689176457546:df <- df %>%
+1689176457547:mutate(H_devided = H / 5)
+1689176478494:# H devided by 5 (needed for formula)
+1689176478494:df <- df %>%
+1689176478495:mutate(H_divd = H / 5)
+1689176480718:# Sanity columns
+1689176480719:colnames(df)
+1689176483871:# Select most relevant data for further analising
+1689176483873:df <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689176487515:# Show selected data
+1689176487516:kable(head(df, n = 10L),
+1689176487517:col.names = colnames(df),
+1689176487517:caption = "Table view of filtered data",
+1689176487518:format = "html",
+1689176487518:align = "c"
+1689176487518:)
+1689176491049:# Data split
+1689176491049:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689176493781:# Check the split out
+1689176493784:df
+1689176498809:# Check the split out
+1689176498811:df_split
+1689176515247:# Formula
+1689176515249:formula <- ((1329 * 10 ^(-H_divd))/diameter)^2
+1689176526563:# Formula
+1689176526565:formula <- ((1329 * 10 ^(-H))/diameter)^2
+1689176557716:# Formula
+1689176557717:formula <- ((1329 * 10 ^(-df$H_divd))/df$diameter)^2
+1689176565902:# Check the split out
+1689176565904:df_split
