@@ -1020,3 +1020,526 @@
 1689176557717:formula <- ((1329 * 10 ^(-df$H_divd))/df$diameter)^2
 1689176565902:# Check the split out
 1689176565904:df_split
+1689176618556:# Data split
+1689176618558:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689176621030:# Check the split out
+1689176621031:df_split
+1689176657874:# Formula
+1689176657876:formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
+1689176719514:# Regression
+1689176719515:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689176823536:# Formula
+1689176823536:formula <- albedo ~ I(((1329 * 10^(-H_divd))/diameter)^2)
+1689176826120:# Regression
+1689176826122:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689176845739:# Regression
+1689176845741:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689176850817:# Formula
+1689176850818:formula <- albedo ~ H_divd * diameter
+1689176852537:# Regression
+1689176852538:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689177079839:# Formula
+1689177079840:formula <- albedo ~ H_divd + diameter
+1689177083200:# Regression
+1689177083202:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689181183969:colnames(df)
+1689181191287:# Show selected data
+1689181191288:kable(head(df, n = 10L),
+1689181191289:col.names = colnames(df),
+1689181191289:caption = "Table view of filtered data",
+1689181191290:format = "html",
+1689181191290:align = "c"
+1689181191291:)
+1689181525439:df$albedo <- (df$albedo - min(df$albedo)) / (max(df$albedo) - min(df$albedo))
+1689181740281:# Regression
+1689181740283:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689181858820:df <- na.omit(df)
+1689181861418:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689181870970:df <- na.omit(df)
+1689181882219:df
+1689181893032:head(df)
+1689181943355:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689181951110:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689181951112:df <- df %>%
+1689181951112:mutate(brightness = case_when(
+1689181951113:H < 15 ~ "Very Bright",
+1689181951113:H >= 15 & H < 20 ~ "Moderately Bright",
+1689181951114:TRUE ~ "Dim"
+1689181951114:))
+1689181953753:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689181953754:df <- df %>%
+1689181953755:mutate(size_category = case_when(
+1689181953756:diameter < 1 ~ "Small",
+1689181953756:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689181953757:diameter > 10 ~ "Large",
+1689181953757:TRUE ~ "Unknown"
+1689181953758:))
+1689181956535:# H devided by 5 (needed for formula)
+1689181956537:df <- df %>%
+1689181956538:mutate(H_divd = H / 5)
+1689181958545:# Sanity columns
+1689181958546:colnames(df)
+1689181964113:# Select most relevant data for further analising
+1689181964114:df <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689181979411:colnames(df)
+1689181991662:df <- na.omit(df)
+1689182006716:head(df)
+1689182014054:# Show selected data
+1689182014056:kable(head(df, n = 10L),
+1689182014056:col.names = colnames(df),
+1689182014057:caption = "Table view of filtered data",
+1689182014057:format = "html",
+1689182014058:align = "c"
+1689182014058:)
+1689182091690:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689182102392:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689182102393:df <- df %>%
+1689182102394:mutate(brightness = case_when(
+1689182102394:H < 15 ~ "Very Bright",
+1689182102395:H >= 15 & H < 20 ~ "Moderately Bright",
+1689182102395:TRUE ~ "Dim"
+1689182102396:))
+1689182104532:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689182104533:df <- df %>%
+1689182104533:mutate(size_category = case_when(
+1689182104534:diameter < 1 ~ "Small",
+1689182104534:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689182104535:diameter > 10 ~ "Large",
+1689182104535:TRUE ~ "Unknown"
+1689182104536:))
+1689182107499:# H devided by 5 (needed for formula)
+1689182107501:df <- df %>%
+1689182107501:mutate(H_divd = H / 5)
+1689182117601:# Select most relevant data for further analising
+1689182117602:df <- df %>% select(name, albedo, H, H_divd, diameter, epoch, brightness, size_category)
+1689182119770:df <- na.omit(df)
+1689182148582:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689182155335:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689182155337:df <- df %>%
+1689182155337:mutate(brightness = case_when(
+1689182155338:H < 15 ~ "Very Bright",
+1689182155338:H >= 15 & H < 20 ~ "Moderately Bright",
+1689182155339:TRUE ~ "Dim"
+1689182155339:))
+1689182156706:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689182156708:df <- df %>%
+1689182156708:mutate(size_category = case_when(
+1689182156709:diameter < 1 ~ "Small",
+1689182156709:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689182156710:diameter > 10 ~ "Large",
+1689182156710:TRUE ~ "Unknown"
+1689182156711:))
+1689182157957:# H devided by 5 (needed for formula)
+1689182157958:df <- df %>%
+1689182157959:mutate(H_divd = H / 5)
+1689182200424:# Select most relevant data for further analising
+1689182200425:dff <- df %>% select(name, albedo, H, H_divd, diameter, brightness, size_category)
+1689182201862:dff <- na.omit(dff)
+1689182239845:# Select most relevant data for further analising
+1689182239847:dff <- df %>% select(name, albedo, H, H_divd, diameter_sigma, epoch, brightness, size_category)
+1689182242262:dff <- na.omit(dff)
+1689182253095:dff <- na.omit(dff)
+1689182257283:# Select most relevant data for further analising
+1689182257301:dff <- df %>% select(name, albedo, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182260239:dff <- na.omit(dff)
+1689182282057:# Select most relevant data for further analising
+1689182282059:dff <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma, epoch)
+1689182284123:dff <- na.omit(dff)
+1689182295411:# Select most relevant data for further analising
+1689182295412:dff <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma , brightness, size_category)
+1689182296859:dff <- na.omit(dff)
+1689182311319:# Select most relevant data for further analising
+1689182311321:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182313610:dff <- na.omit(dff)
+1689182330006:# Select most relevant data for further analising
+1689182330008:dff <- df %>% select(H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182332679:dff <- na.omit(dff)
+1689182360593:# Select most relevant data for further analising
+1689182360595:dff <- df %>% select(albedo, H, H_divd, diameter_sigma, epoch, brightness, size_category)
+1689182361941:dff <- na.omit(dff)
+1689182370482:# Select most relevant data for further analising
+1689182370484:dff <- df %>% select(albedo, H, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182372231:dff <- na.omit(dff)
+1689182385885:# Select most relevant data for further analising
+1689182385886:dff <- df %>% select(albedo, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182387389:dff <- na.omit(dff)
+1689182401769:# Select most relevant data for further analising
+1689182401771:dff <- df %>% select(albedo, H, H_divd, epoch, brightness, size_category)
+1689182404038:dff <- na.omit(dff)
+1689182559093:# Select most relevant data for further analising
+1689182559095:df <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182592553:# Select most relevant data for further analising
+1689182592554:df <- df %>% select(pds, albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182599549:# Select most relevant data for further analising
+1689182599551:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182601718:df <- na.omit(df)
+1689182738628:# Select most relevant data for further analising
+1689182738630:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182748359:# Select most relevant data for further analising
+1689182748360:df <- df %>% select(H)
+1689182750954:df <- na.omit(df)
+1689182763795:# Select most relevant data for further analising
+1689182763795:df <- df %>% select(albedo)
+1689182780891:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689182821937:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689182821938:df <- df %>%
+1689182821939:mutate(brightness = case_when(
+1689182821940:H < 15 ~ "Very Bright",
+1689182821940:H >= 15 & H < 20 ~ "Moderately Bright",
+1689182821941:TRUE ~ "Dim"
+1689182821941:))
+1689182823691:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689182823693:df <- df %>%
+1689182823693:mutate(size_category = case_when(
+1689182823694:diameter < 1 ~ "Small",
+1689182823694:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689182823695:diameter > 10 ~ "Large",
+1689182823695:TRUE ~ "Unknown"
+1689182823696:))
+1689182825975:# H devided by 5 (needed for formula)
+1689182825976:df <- df %>%
+1689182825977:mutate(H_divd = H / 5)
+1689182830798:head(dff)
+1689182839632:# Select most relevant data for further analising
+1689182839633:dff <- df %>% select(albedo)
+1689182842251:head(dff)
+1689182844703:dff <- na.omit(dff)
+1689182919709:head(df)
+1689182977133:# Select most relevant data for further analising
+1689182977133:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689182979097:dff$albedo[is.na(dff$albedo)] <- 0
+1689182981730:dff <- na.omit(dff)
+1689183000160:head(df)
+1689183011478:row_number(df)
+1689183017934:row_number(dff)
+1689183303024:# Select most relevant data for further analising
+1689183303026:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183306620:dff$albedo[is.na(dff$albedo)] <- 0
+1689183319773:dff <- na.omit(dff)
+1689183359441:dff$albedo[is.na(dff$albedo)] <- 0
+1689183366574:head(dff)
+1689183370308:head(dff)
+1689183372827:head(dff)
+1689183374514:head(dff)
+1689183431670:# Select most relevant data for further analising
+1689183431672:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183439914:dff$albedo[is.na(dff$albedo)] <- 0
+1689183573432:dff <- na.replace(dff, 0)
+1689183581497:dff <- na.omit(dff)
+1689183594135:# Select most relevant data for further analising
+1689183594137:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183596177:dff <- na.omit(dff)
+1689183599715:# Select most relevant data for further analising
+1689183599716:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183612683:dff$albedo <- na.replace(dff$albedo, 0)
+1689183613785:dff <- na.omit(dff)
+1689183630091:# Select most relevant data for further analising
+1689183630093:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183635992:dff$albedo <- na.replace(dff$albedo, 0)
+1689183648021:dff <- na.replace(dff, 0)
+1689183650867:dff <- na.omit(dff)
+1689183656176:head(dff)
+1689183690123:# Select most relevant data for further analising
+1689183690125:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183731240:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689183738590:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689183738592:df <- df %>%
+1689183738592:mutate(brightness = case_when(
+1689183738593:H < 15 ~ "Very Bright",
+1689183738593:H >= 15 & H < 20 ~ "Moderately Bright",
+1689183738594:TRUE ~ "Dim"
+1689183738594:))
+1689183741254:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689183741255:df <- df %>%
+1689183741256:mutate(size_category = case_when(
+1689183741256:diameter < 1 ~ "Small",
+1689183741257:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689183741257:diameter > 10 ~ "Large",
+1689183741258:TRUE ~ "Unknown"
+1689183741258:))
+1689183743843:# H devided by 5 (needed for formula)
+1689183743845:df <- df %>%
+1689183743845:mutate(H_divd = H / 5)
+1689183745723:# Sanity columns
+1689183745725:colnames(df)
+1689183768615:# Select most relevant data for further analising
+1689183768616:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689183777873:# Clean data
+1689183777873:df <- na.replace(df, 0)
+1689183779850:df <- na.omit(df)
+1689183910336:# Show selected data
+1689183910337:kable(head(df, n = 10L),
+1689183910337:col.names = colnames(df),
+1689183910338:caption = "Table view of filtered data",
+1689183910338:format = "html",
+1689183910339:align = "c"
+1689183910339:)
+1689183920999:df$albedo <- (df$albedo - min(df$albedo)) / (max(df$albedo) - min(df$albedo))
+1689183941117:# Data split
+1689183941119:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689183942826:# Check the split out
+1689183942827:df_split
+1689183957756:# Formula
+1689183957758:formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
+1689183959567:# Regression
+1689183959568:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
+1689183965071:# Traing the model
+1689183965073:m1 <- ml_fit(model1, df_split$training)
+1689183973438:# End the session
+1689183973440:spark_disconnect(sc)
+1689183985575:# Connect
+1689183985575:sc <- sparklyr::spark_connect(master = "local")
+1689183994867:datasetPath <- "/data/dataset.csv"
+1689183994917:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184003940:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689184003940:df <- df %>%
+1689184003940:mutate(brightness = case_when(
+1689184003940:H < 15 ~ "Very Bright",
+1689184003940:H >= 15 & H < 20 ~ "Moderately Bright",
+1689184003941:TRUE ~ "Dim"
+1689184003941:))
+1689184004136:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689184004136:df <- df %>%
+1689184004137:mutate(size_category = case_when(
+1689184004137:diameter < 1 ~ "Small",
+1689184004138:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689184004138:diameter > 10 ~ "Large",
+1689184004139:TRUE ~ "Unknown"
+1689184004139:))
+1689184004514:# H devided by 5 (needed for formula)
+1689184004515:df <- df %>%
+1689184004516:mutate(H_divd = H / 5)
+1689184011430:# Sanity columns
+1689184011431:colnames(df)
+1689184020587:# Select most relevant data for further analising
+1689184020589:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184028992:# Clean data
+1689184028994:df$albedo <- na.replace(df$albedo, 0)
+1689184073228:# Clean data
+1689184073230:df$albedo <- replace(df$albedo, is.na(df$albedo), 0)
+1689184077647:df <- na.omit(df)
+1689184087996:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184103888:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689184103889:df <- df %>%
+1689184103890:mutate(brightness = case_when(
+1689184103890:H < 15 ~ "Very Bright",
+1689184103891:H >= 15 & H < 20 ~ "Moderately Bright",
+1689184103891:TRUE ~ "Dim"
+1689184103892:))
+1689184105842:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689184105843:df <- df %>%
+1689184105843:mutate(size_category = case_when(
+1689184105844:diameter < 1 ~ "Small",
+1689184105845:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689184105845:diameter > 10 ~ "Large",
+1689184105846:TRUE ~ "Unknown"
+1689184105846:))
+1689184108780:# H devided by 5 (needed for formula)
+1689184108782:df <- df %>%
+1689184108782:mutate(H_divd = H / 5)
+1689184110386:# Sanity columns
+1689184110388:colnames(df)
+1689184113154:# Select most relevant data for further analising
+1689184113155:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184118028:# Select most relevant data for further analising
+1689184118028:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184127948:# Clean data
+1689184127950:dff$albedo <- replace(dff$albedo, is.na(dff$albedo), 0)
+1689184130872:dff <- na.omit(dff)
+1689184134193:# Select most relevant data for further analising
+1689184134195:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184136372:dff <- na.omit(dff)
+1689184210683:# Clean data
+1689184210685:dff$albedo <- replace(dff$albedo, is.na(dff$albedo), 0)
+1689184212772:dff <- na.omit(dff)
+1689184216545:# Select most relevant data for further analising
+1689184216547:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184223260:# Clean data
+1689184223262:dff$albedo <- replace(dff$albedo, is.na(dff$albedo), 0)
+1689184229108:dff <- na.omit(dff)
+1689184297802:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184305916:# Filter data
+1689184305917:df <- df %>%
+1689184305918:filter(!(is.na(diameter_sigma) ||
+1689184305918:is.na(albedo) ||
+1689184305919:is.na(H) ||
+1689184305919:is.na(diameter)||
+1689184305920:is.na(epoch) ||
+1689184305920:is.na(name)
+1689184305921:))
+1689184311768:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689184311769:df <- df %>%
+1689184311770:mutate(brightness = case_when(
+1689184311770:H < 15 ~ "Very Bright",
+1689184311771:H >= 15 & H < 20 ~ "Moderately Bright",
+1689184311771:TRUE ~ "Dim"
+1689184311772:))
+1689184313276:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689184313278:df <- df %>%
+1689184313278:mutate(size_category = case_when(
+1689184313279:diameter < 1 ~ "Small",
+1689184313279:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689184313280:diameter > 10 ~ "Large",
+1689184313280:TRUE ~ "Unknown"
+1689184313281:))
+1689184314527:# H devided by 5 (needed for formula)
+1689184314528:df <- df %>%
+1689184314529:mutate(H_divd = H / 5)
+1689184316154:# Sanity columns
+1689184316155:colnames(df)
+1689184318843:# Select most relevant data for further analising
+1689184318845:dff <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689184321101:dff <- na.omit(dff)
+1689184346344:View(dff)
+1689184354771:View(dff)
+1689184356968:View(dff)
+1689184367305:dff[["albedo"]]
+1689184371783:dff[["H"]]
+1689184376261:dff[["albedo"]]\
+1689184412342:df <- na.omit(df)
+1689184428350:nrow(df)
+1689184435990:nrow(dff)
+1689184444126:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184467113:# Filter data
+1689184467114:df <- df %>%
+1689184467115:filter(!(is.na(diameter_sigma) ||
+1689184467115:is.na(albedo) ||
+1689184467116:is.na(H) ||
+1689184467116:is.na(diameter)||
+1689184467117:is.na(epoch) ||
+1689184467117:is.na(name)
+1689184467118:))
+1689184474788:nrow(df)
+1689184482250:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184492578:nrow(df)
+1689184501982:print(nrow(df))
+1689184520028:rows <- nrow(df)
+1689184521434:print(rows)
+1689184572343:count(df)
+1689184577082:# Filter data
+1689184577084:df <- df %>%
+1689184577084:filter(!(is.na(diameter_sigma) ||
+1689184577085:is.na(albedo) ||
+1689184577085:is.na(H) ||
+1689184577086:is.na(diameter)||
+1689184577086:is.na(epoch) ||
+1689184577087:is.na(name)
+1689184577087:))
+1689184587157:count(df)
+1689184641542:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184647418:count(df)
+1689184650199:# Filter data
+1689184650201:df <- df %>%
+1689184650201:filter(!(is.na(diameter_sigma) ||
+1689184650202:is.na(albedo) ||
+1689184650202:is.na(H) ||
+1689184650203:is.na(diameter)||
+1689184650203:is.na(epoch)
+1689184650204:))
+1689184652578:count(df)
+1689184676473:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184688111:# Filter data
+1689184688112:df <- df %>%
+1689184688113:filter(!(is.na(diameter_sigma) ||
+1689184688113:is.na(H) ||
+1689184688114:is.na(diameter)||
+1689184688114:is.na(epoch)
+1689184688115:))
+1689184696555:count(df)
+1689184770233:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184777151:count(df)
+1689184779370:# Filter data
+1689184779372:df <- df %>%
+1689184779373:filter(!(is.na(H) ||
+1689184779373:is.na(diameter)||
+1689184779374:is.na(epoch)
+1689184779374:))
+1689184781832:count(df)
+1689184794871:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184805051:count(df)
+1689184808116:# Filter data
+1689184808117:df <- df %>%
+1689184808118:filter(!(is.na(H) ||
+1689184808119:is.na(diameter)
+1689184808119:))
+1689184810294:count(df)
+1689184818405:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184824755:# Filter data
+1689184824757:df <- df %>%
+1689184824757:filter(!(is.na(H)
+1689184824758:))
+1689184826381:count(df)
+1689184865251:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689184871836:# Filter data
+1689184871838:df <- df %>%
+1689184871838:filter(!(is.na(H) || is.na(epoch)))
+1689184873677:count(df)
+1689184909863:# Filter data
+1689184909865:df <- df %>%
+1689184909865:filter(!(is.na(H) || is.na(epoch) || is.na(diameter)))
+1689184912975:count(df)
+1689184924949:# Filter data
+1689184924952:df <- df %>%
+1689184924953:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma)))
+1689184926102:count(df)
+1689184932273:df <- df %>%
+1689184932274:dplyr::mutate(albedo = sparklyr::na.fill(albedo, 0))
+1689184948381:df <- df %>%
+1689184948381:mutate(albedo = na.fill(albedo, 0))
+1689184962186:df <- df %>%
+1689184962187:mutate(albedo = na.replace(albedo, 0))
+1689184990470:df <- df %>%
+1689184990472:dplyr::mutate(albedo = sparklyr::na.fill(albedo, 0))
+1689185068715:df <- df %>%
+1689185068717:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689185079905:count(df)
+1689185090930:df <- na.omit(df)
+1689185108772:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689185119073:# Filter data
+1689185119075:df <- df %>%
+1689185119075:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma)))
+1689185121093:count(df)
+1689185132627:df <- df %>%
+1689185132628:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689185138665:count(df)
+1689185179705:head(df)
+1689185190060:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689185190061:df <- df %>%
+1689185190062:mutate(brightness = case_when(
+1689185190062:H < 15 ~ "Very Bright",
+1689185190063:H >= 15 & H < 20 ~ "Moderately Bright",
+1689185190064:TRUE ~ "Dim"
+1689185190064:))
+1689185192153:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689185192155:df <- df %>%
+1689185192155:mutate(size_category = case_when(
+1689185192156:diameter < 1 ~ "Small",
+1689185192156:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689185192157:diameter > 10 ~ "Large",
+1689185192157:TRUE ~ "Unknown"
+1689185192158:))
+1689185233102:# H devided by 5 (needed for formula)
+1689185233104:df <- df %>%
+1689185233104:mutate(H_divd = H / 5)
+1689185235836:# Sanity columns
+1689185235837:colnames(df)
+1689185244509:# Select most relevant data for further analising
+1689185244511:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+1689185254215:count(df)
+1689185266917:df <- na.omit(df)
+1689185272543:count(df)
+1689185282839:# Show selected data
+1689185282841:kable(head(df, n = 10L),
+1689185282841:col.names = colnames(df),
+1689185282842:caption = "Table view of filtered data",
+1689185282842:format = "html",
+1689185282843:align = "c"
+1689185282844:)
+1689185291728:# Data split
+1689185291729:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689185293188:# Check the split out
+1689185293190:df_split
+1689185301299:# Formula
+1689185301301:formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
+1689185306265:# Regression
+1689185306266:model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")

@@ -21,13 +21,14 @@ df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, i
 
 # Filter data
 df <- df %>%
-  filter(!(is.na(diameter_sigma) ||
-           is.na(albedo) ||
-           is.na(H) ||
-           is.na(diameter)||
-           is.na(epoch) ||
-           is.na(name)
-           ))
+  filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma)))
+
+
+df <- df %>%
+  mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+
+# Check how much is lost
+count(df)
 
 # Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
 df <- df %>%
@@ -54,7 +55,10 @@ df <- df %>%
 colnames(df)
 
 # Select most relevant data for further analising
-df <- df %>% select(name, albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, brightness, size_category)
+
+# Just in case
+df <- na.omit(df)
 
 # Show selected data
 kable(head(df, n = 10L),
@@ -71,10 +75,10 @@ df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
 df_split
 
 # Formula
-formula <- ((1329 * 10 ^(-df$H_divd))/df$diameter)^2
+formula <- albedo ~ ((1329 * 10 (-H_divd))/diameter)^2
 
 # Regression
-model1 <- ml_logistic_regression(df_split$training, label_col = "albedo", features_col = c("diameter"))
+model1 <- ml_logistic_regression(df_split$training, formula, max_iter = 5, family = "binomial")
 
 # Traing the model
 m1 <- ml_fit(model1, df_split$training)
