@@ -238,7 +238,7 @@ cplot_5 <- model_5$centers %>%
   geom_point(size=5) +
   scale_color_gradientn(colors = rainbow(10)) +
   theme(text = element_text(size=16)) +
-  labs(x="diameter", y="number of samples", title = "a) K=5-means")
+  labs(x="diameter", y="Eccentricity (shape)", title = "a) K=5-means")
 
 model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 10)
 
@@ -247,7 +247,7 @@ cplot_10 <- model_10$centers %>%
   geom_point(size=5) +
   scale_color_gradientn(colors = rainbow(10)) +
   theme(text = element_text(size=16)) +
-  labs(x="diameter", y="number of samples", title = "a) K=10-means")
+  labs(x="diameter", y="Eccentricity (shape)", title = "a) K=10-means")
 
 model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
 
@@ -256,7 +256,7 @@ cplot_20 <- model_20$centers %>%
   geom_point(size=5) +
   scale_color_gradientn(colors = rainbow(10)) +
   theme(text = element_text(size=16)) +
-  labs(x="diameter", y="number of samples", title = "a) K=20-means")
+  labs(x="diameter", y="Eccentricity (shape)", title = "a) K=20-means")
 
 # Plotin'
 cplot_5

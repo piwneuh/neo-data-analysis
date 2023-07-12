@@ -2448,3 +2448,26 @@
 1689199591504:labs(x="diameter", y="number of samples", title = "a) K=10-means")
 1689199593344:cplot_10
 1689199595527:cplot_20
+1689199747462:cplot_5 <- model_5$centers %>%
+1689199747463:ggplot(aes(diameter, e, color=e)) +
+1689199747463:geom_point(size=5) +
+1689199747464:scale_color_gradientn(colors = rainbow(10)) +
+1689199747464:theme(text = element_text(size=16)) +
+1689199747464:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=5-means")
+1689199749267:cplot_10 <- model_10$centers %>%
+1689199749268:ggplot(aes(diameter, e, color=e)) +
+1689199749268:geom_point(size=5) +
+1689199749269:scale_color_gradientn(colors = rainbow(10)) +
+1689199749269:theme(text = element_text(size=16)) +
+1689199749270:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=10-means")
+1689199750840:cplot_20 <- model_20$centers %>%
+1689199750841:ggplot(aes(diameter, e, color=e)) +
+1689199750841:geom_point(size=5) +
+1689199750841:scale_color_gradientn(colors = rainbow(10)) +
+1689199750842:theme(text = element_text(size=16)) +
+1689199750842:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=20-means")
+1689199752562:# Plotin'
+1689199752564:cplot_5
+1689199754267:cplot_10
+1689199755246:cplot_20
+1689199774225:View(cp1)
