@@ -487,3 +487,16 @@
 1689168636303:))
 1689168639370:# Sanity columns
 1689168639371:colnames(df)
+1689168907296:# Classification modeling
+1689168907298:# Regression
+1689168907298:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H", "diameter"))
+1689168930285:# Classification modeling
+1689168930287:# Regression
+1689168930288:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H"))
+1689168974091:# Data split
+1689168974093:df_split <- sdf_partition(df, training = 0.7, test = 0.3)
+1689168989560:# Data split
+1689168989578:df_split <- df_random_split(df, training = 0.7, test = 0.3)
+1689169003466:# Data split
+1689169003467:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689169010706:df_split

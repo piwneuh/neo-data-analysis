@@ -55,5 +55,12 @@ df <- df %>%
 # Sanity columns
 colnames(df)
 
+# Classification modeling
+# Regression
+model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H"))
+
+# Data split
+df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+df_split
 # End the session
 #spark_disconnect(sc)
