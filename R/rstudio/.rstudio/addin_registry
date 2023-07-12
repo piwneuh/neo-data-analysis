@@ -4,7 +4,7 @@
         "description" : "Input math expressions via the MathQuill library.",
         "interactive" : true,
         "name" : "Input LaTeX Math",
-        "ordinal" : 14,
+        "ordinal" : 10,
         "package" : "bookdown",
         "title" : ""
     },
@@ -13,26 +13,8 @@
         "description" : "Run bookdown::serve_book() to live preview a book.",
         "interactive" : true,
         "name" : "Preview Book",
-        "ordinal" : 13,
+        "ordinal" : 9,
         "package" : "bookdown",
-        "title" : ""
-    },
-    "clipr::clipr_output" : {
-        "binding" : "clipr_output",
-        "description" : "Copies the console output of a selected expression to the system clipboard",
-        "interactive" : false,
-        "name" : "Output to clipboard",
-        "ordinal" : 4,
-        "package" : "clipr",
-        "title" : ""
-    },
-    "clipr::clipr_result" : {
-        "binding" : "clipr_result",
-        "description" : "Copies the results of a selected expression to the system clipboard",
-        "interactive" : false,
-        "name" : "Value to clipboard",
-        "ordinal" : 3,
-        "package" : "clipr",
         "title" : ""
     },
     "covr::addin_report" : {
@@ -40,7 +22,7 @@
         "description" : "Calculates the package test coverage and opens a report, using `covr::report()`",
         "interactive" : false,
         "name" : "Calculate package test coverage",
-        "ordinal" : 16,
+        "ordinal" : 12,
         "package" : "covr",
         "title" : ""
     },
@@ -49,7 +31,7 @@
         "description" : "Adds roxgen tag code to current selections in the active RStudio document",
         "interactive" : false,
         "name" : "addRoxytagCode",
-        "ordinal" : 6,
+        "ordinal" : 2,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -58,7 +40,7 @@
         "description" : "Adds roxgen tag eqn to current selections in the active RStudio document",
         "interactive" : false,
         "name" : "addRoxytagEqn",
-        "ordinal" : 8,
+        "ordinal" : 4,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -67,7 +49,7 @@
         "description" : "Adds roxgen tag link to current selections in the active RStudio document",
         "interactive" : false,
         "name" : "addRoxytagLink",
-        "ordinal" : 7,
+        "ordinal" : 3,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -76,7 +58,7 @@
         "description" : "experimental, open data.frame as csv in viewer and select all for copying to excel",
         "interactive" : false,
         "name" : "exportDataFrame",
-        "ordinal" : 11,
+        "ordinal" : 7,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -85,7 +67,7 @@
         "description" : "Inserts a table of contents into an Rmd file active in RStudio to the cursor position.\n The TOC is generated reading the output html already rendered from that Rmd, so serve_site or\n build_site must be ran first before using the addin.",
         "interactive" : false,
         "name" : "insertPostTOC",
-        "ordinal" : 12,
+        "ordinal" : 8,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -94,7 +76,7 @@
         "description" : "Executes the currently open R script file via Rscript with --vanilla option",
         "interactive" : false,
         "name" : "runCurrentRscript",
-        "ordinal" : 5,
+        "ordinal" : 1,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -103,7 +85,7 @@
         "description" : "Profile code selected in RStudio in the background, write results into a file and open it",
         "interactive" : false,
         "name" : "runProfiler",
-        "ordinal" : 10,
+        "ordinal" : 6,
         "package" : "jhaddins",
         "title" : ""
     },
@@ -112,26 +94,8 @@
         "description" : "Tries to use View to View the object defined by a text selected in RStudio",
         "interactive" : false,
         "name" : "viewSelection",
-        "ordinal" : 9,
+        "ordinal" : 5,
         "package" : "jhaddins",
-        "title" : ""
-    },
-    "reprex::reprex_addin" : {
-        "binding" : "reprex_addin",
-        "description" : "Run `reprex::reprex()` to prepare a reproducible example for sharing.",
-        "interactive" : true,
-        "name" : "Render reprex...",
-        "ordinal" : 1,
-        "package" : "reprex",
-        "title" : ""
-    },
-    "reprex::reprex_selection" : {
-        "binding" : "reprex_selection",
-        "description" : "Prepare reprex from current selection",
-        "interactive" : false,
-        "name" : "Reprex selection",
-        "ordinal" : 2,
-        "package" : "reprex",
         "title" : ""
     },
     "testit::insert_identical" : {
@@ -139,7 +103,7 @@
         "description" : "Insert the infix operator %==% from testit.",
         "interactive" : false,
         "name" : "Insert %==%",
-        "ordinal" : 15,
+        "ordinal" : 11,
         "package" : "testit",
         "title" : ""
     }

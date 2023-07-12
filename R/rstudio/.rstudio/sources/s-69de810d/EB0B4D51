@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1689205825447.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EB0B4D51",
+    "lastKnownWriteTime" : 1689206203,
+    "last_content_update" : 1689206203,
+    "path" : "~/classification.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "200,50",
+        "scrollLine" : "164"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
