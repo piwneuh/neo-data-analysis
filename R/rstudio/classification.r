@@ -41,15 +41,6 @@ df <- df %>%
     TRUE ~ 0
   ))
 
-# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
-df <- df %>%
-  mutate(size_category = case_when(
-    diameter < 1 ~ "Small",
-    diameter >= 1 & diameter <= 10 ~ "Medium",
-    diameter > 10 ~ "Large",
-    TRUE ~ "Unknown"
-    ))
-
 # H devided by 5 (needed for formula)
 df <- df %>%
   mutate(H_divd = H / 5)
@@ -58,7 +49,7 @@ df <- df %>%
 colnames(df)
 
 # Select most relevant data for further analising
-df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_seen, brightness, size_category)
+df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_seen, brightness)
 
 # Just in case
 df <- na.omit(df)
@@ -215,6 +206,62 @@ knitr::kable(array(c("Bayes", "SVC", "Decision Tree",
              align = "ccc",
              format = "html"
 )
+
+# Clusterizatio dataset
+df_clusterization <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+
+# Filter clusterization data
+df_clusterization <- df_clusterization %>%
+  filter(!(is.na(diameter) || is.na(e)))
+
+# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+df_clusterization <- df_clusterization %>%
+  mutate(size_category = case_when(
+    diameter < 1 ~ "Small",
+    diameter >= 1 & diameter < 5 ~ "Medium",
+    diameter >= 5 & diameter < 10 ~ "Large",
+    diameter >= 10 ~ "X-Large",
+    TRUE ~ "Unknown"
+  ))
+
+# Select columns relevant for clusterizations
+df_clusterization <- df_clusterization %>% select(diameter, e, size_category)
+
+# New Formula
+cluster_formula <- size_category ~ diameter + e
+
+# K-means 5
+model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 5)
+
+cplot_5 <- model_5$centers %>%
+  ggplot(aes(diameter, e, color=e)) +
+  geom_point(size=5) +
+  scale_color_gradientn(colors = rainbow(10)) +
+  theme(text = element_text(size=16)) +
+  labs(x="diameter", y="number of samples", title = "a) K=5-means")
+
+model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 10)
+
+cplot_10 <- model_10$centers %>%
+  ggplot(aes(diameter, e, color=e)) +
+  geom_point(size=5) +
+  scale_color_gradientn(colors = rainbow(10)) +
+  theme(text = element_text(size=16)) +
+  labs(x="diameter", y="number of samples", title = "a) K=10-means")
+
+model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
+
+cplot_20 <- model_20$centers %>%
+  ggplot(aes(diameter, e, color=e)) +
+  geom_point(size=5) +
+  scale_color_gradientn(colors = rainbow(10)) +
+  theme(text = element_text(size=16)) +
+  labs(x="diameter", y="number of samples", title = "a) K=20-means")
+
+# Plotin'
+cplot_5
+cplot_10
+cplot_20
 
 # End the session
 #spark_disconnect(sc)

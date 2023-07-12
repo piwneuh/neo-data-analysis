@@ -2303,3 +2303,148 @@
 1689196657348:align = "ccc",
 1689196657348:format = "html"
 1689196657348:)
+1689197237088:# Clusterization
+1689197237089:df_clusterization <- df %>%
+1689197237089:sselect(size_category, diameter, diameter_sigma, H)
+1689197244490:# Clusterization
+1689197244492:df_clusterization <- df %>%
+1689197244492:select(size_category, diameter, diameter_sigma, H)
+1689197475347:# Clusterization
+1689197475349:df_clusterization <- df %>%
+1689197475349:select(size_category, diameter, diameter_sigma, H)
+1689197633093:cluster_formula <- size_category ~ diameter + diameter_sigma + H
+1689197667505:model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 5)
+1689197784174:cp1 <- model_5$centers %>%
+1689197784174:ggplot(aes(diameter, H, color=H)) +
+1689197784174:geom_point(size=5) +
+1689197784175:scale_color_gradientn(colors = rainbow(10)) +
+1689197784175:theme(text = element_text(size=16)) +
+1689197784175:labs(x="quantified", y="number of samples", title = "a) K=5-means")
+1689197789908:cp1
+1689198225009:# Clusterizatio dataset
+1689198225011:df_clusterization <- df %>%
+1689198225011:select(size_category, diameter, diameter_sigma)
+1689198226664:cluster_formula <- size_category ~ diameter + diameter_sigma
+1689198229161:model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 5)
+1689198235408:cp1 <- model_5$centers %>%
+1689198235409:ggplot(aes(diameter, diameter_sigma, color=diameter_sigma)) +
+1689198235410:geom_point(size=5) +
+1689198235410:scale_color_gradientn(colors = rainbow(10)) +
+1689198235410:theme(text = element_text(size=16)) +
+1689198235410:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689198237362:cp1
+1689198930106:# Clusterizatio dataset
+1689198930108:df_clusterization <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689198940908:# Filter clusterization data
+1689198940909:df_clusterization <- df_clusterization %>%
+1689198940909:filter(!(is.na(diameter) || is.na(e)))
+1689198956699:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689198956701:df_clusterization <- df_clusterization %>%
+1689198956701:mutate(size_category = case_when(
+1689198956701:diameter < 1 ~ "Small",
+1689198956702:diameter >= 1 & diameter < 5 ~ "Medium",
+1689198956702:diameter >= 5 & diameter < 10 ~ "Large",
+1689198956702:diameter >= 10 ~ "X-Large",
+1689198956702:TRUE ~ "Unknown"
+1689198956702:))
+1689198998629:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689198998630:df_clusterization <- df_clusterization %>%
+1689198998630:mutate(size_category = case_when(
+1689198998631:diameter < 1 ~ "Small",
+1689198998631:diameter >= 1 & diameter < 5 ~ "Medium",
+1689198998631:diameter >= 5 & diameter < 10 ~ "Large",
+1689198998631:diameter >= 10 ~ "X-Large",
+1689198998632:TRUE ~ "Unknown"
+1689198998632:))
+1689199000406:df_clusterization <- df_clusterization %>% select(diameter, e, size_category)
+1689199010188:View(df_clusterization)
+1689199040333:count(df_clusterization)
+1689199078539:cp1 <- model_5$centers %>%
+1689199078541:ggplot(aes(diameter, e, color=e)) +
+1689199078541:geom_point(size=5) +
+1689199078541:scale_color_gradientn(colors = rainbow(10)) +
+1689199078541:theme(text = element_text(size=16)) +
+1689199078542:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199080608:cp1
+1689199106924:# Clusterizatio dataset
+1689199106925:df_clusterization <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689199115722:# Filter clusterization data
+1689199115724:df_clusterization <- df_clusterization %>%
+1689199115724:filter(!(is.na(diameter) || is.na(e)))
+1689199120031:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689199120031:df_clusterization <- df_clusterization %>%
+1689199120031:mutate(size_category = case_when(
+1689199120032:diameter < 1 ~ "Small",
+1689199120032:diameter >= 1 & diameter < 5 ~ "Medium",
+1689199120032:diameter >= 5 & diameter < 10 ~ "Large",
+1689199120033:diameter >= 10 ~ "X-Large",
+1689199120033:TRUE ~ "Unknown"
+1689199120033:))
+1689199126937:df_clusterization <- df_clusterization %>% select(diameter, e, size_category)
+1689199131953:head(df_clusterization)
+1689199144667:cluster_formula <- size_category ~ diameter + e
+1689199149737:model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 5)
+1689199163068:View(model_5)
+1689199170321:cp1 <- model_5$centers %>%
+1689199170322:ggplot(aes(diameter, e, color=e)) +
+1689199170322:geom_point(size=5) +
+1689199170323:scale_color_gradientn(colors = rainbow(10)) +
+1689199170323:theme(text = element_text(size=16)) +
+1689199170324:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199172127:cp1
+1689199265336:model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 10)
+1689199279875:cp2 <- model_5$centers %>%
+1689199279877:ggplot(aes(diameter, e, color=e)) +
+1689199279877:geom_point(size=5) +
+1689199279877:scale_color_gradientn(colors = rainbow(10)) +
+1689199279878:theme(text = element_text(size=16)) +
+1689199279878:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199281492:cp2
+1689199313274:model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 25)
+1689199317447:cp1 <- model_5$centers %>%
+1689199317449:ggplot(aes(diameter, e, color=e)) +
+1689199317450:geom_point(size=5) +
+1689199317450:scale_color_gradientn(colors = rainbow(10)) +
+1689199317450:theme(text = element_text(size=16)) +
+1689199317451:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199319402:cp1
+1689199358627:cp2 <- model_10$centers %>%
+1689199358629:ggplot(aes(diameter, e, color=e)) +
+1689199358629:geom_point(size=5) +
+1689199358630:scale_color_gradientn(colors = rainbow(10)) +
+1689199358630:theme(text = element_text(size=16)) +
+1689199358630:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199360759:cp2
+1689199389143:model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
+1689199425585:cplot_20 <- model_10$centers %>%
+1689199425587:ggplot(aes(diameter, e, color=e)) +
+1689199425587:geom_point(size=5) +
+1689199425587:scale_color_gradientn(colors = rainbow(10)) +
+1689199425588:theme(text = element_text(size=16)) +
+1689199425588:labs(x="diameter", y="number of samples", title = "a) K=10-means")
+1689199427021:cplot_20
+1689199443067:cplot_20 <- model_20$centers %>%
+1689199443068:ggplot(aes(diameter, e, color=e)) +
+1689199443069:geom_point(size=5) +
+1689199443069:scale_color_gradientn(colors = rainbow(10)) +
+1689199443069:theme(text = element_text(size=16)) +
+1689199443069:labs(x="diameter", y="number of samples", title = "a) K=20-means")
+1689199444606:cplot_20
+1689199579611:# Plotin'
+1689199579612:cplot_5
+1689199585887:cplot_5 <- model_5$centers %>%
+1689199585889:ggplot(aes(diameter, e, color=e)) +
+1689199585889:geom_point(size=5) +
+1689199585890:scale_color_gradientn(colors = rainbow(10)) +
+1689199585890:theme(text = element_text(size=16)) +
+1689199585891:labs(x="diameter", y="number of samples", title = "a) K=5-means")
+1689199587855:# Plotin'
+1689199587857:cplot_5
+1689199591501:cplot_10 <- model_10$centers %>%
+1689199591502:ggplot(aes(diameter, e, color=e)) +
+1689199591503:geom_point(size=5) +
+1689199591503:scale_color_gradientn(colors = rainbow(10)) +
+1689199591504:theme(text = element_text(size=16)) +
+1689199591504:labs(x="diameter", y="number of samples", title = "a) K=10-means")
+1689199593344:cplot_10
+1689199595527:cplot_20
