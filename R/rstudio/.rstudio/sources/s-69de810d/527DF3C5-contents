@@ -88,7 +88,7 @@ result_data <- data.frame(
   wp = numeric(max_iterations), 
   wr = numeric(max_iterations), 
   a = numeric(max_iterations),
-  roc = numeric(max_iterations)
+  f1 = numeric(max_iterations)
   )
 
 for (i in 1:max_iterations) {
@@ -102,6 +102,7 @@ for (i in 1:max_iterations) {
   result_data$wp[i] <- result$weighted_precision()
   result_data$wr[i] <- result$weighted_recall()
   result_data$a[i] <- result$accuracy()
+  result_data$f1[i] <- result$weighted_f_measure()
 }
 
 # Sanity
@@ -137,11 +138,83 @@ plot3 <- result_data %>%
   theme(text = element_text(size = 16)) +
   labs(x = "Num of iterations", y = "Accuracy", title = "a) Accuracy dependency on number of iterations")
 
+# Plotting F1
+plot4 <- result_data %>%
+  ggplot(aes(i, wp, color = wp)) +
+  geom_line(linewidth = 2) +
+  scale_x_continuous(breaks = 1:max_iterations) +
+  scale_y_continuous(breaks = result_data$f1) +
+  scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+  theme(text = element_text(size = 16)) +
+  labs(x = "Num of iterations", y = "F1", title = "a) F1 score dependency on number of iterations")
+
 # Display
 plot1
 plot2
 plot3
+plot4
 
+# Reaffirm formula
+formula <- can_be_seen ~ H + H_divd + diameter + albedo
+
+# Bayes classification
+bayes_model <- df_split$training %>% ml_naive_bayes(formula)
+
+# Linear SVC classification
+linear_svc_model <- df_split$training %>%
+  ml_linear_svc(formula)
+
+# Decision 3 classification
+decision_tree_classifier <- df_split$training %>%
+  ml_decision_tree_classifier(formula)
+
+# Testing Accuracy Score for different methods using test dataset
+bayes_accuracy <- ml_evaluate(bayes_model, df_split$test)$Accuracy
+svc_accuracy <- ml_evaluate(linear_svc_model, df_split$test)$Accuracy
+d3_accuracy <- ml_evaluate(decision_tree_classifier, df_split$test)$Accuracy
+
+# Testing Accuracy Score for different methods using 4-cross validation
+k4c <- function(dataset, model, formula){
+  dataset <- dataset %>%
+    sdf_random_split(seed=1,
+                     s1=0.25,
+                     s2=0.25,
+                     s3=0.25,
+                     s4=0.25)
+  training <- list(
+    s1 = sdf_bind_rows(dataset$s2, dataset$s3, dataset$s4),
+    s2 = sdf_bind_rows(dataset$s1, dataset$s3, dataset$s4),
+    s3 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s4),
+    s4 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s3)
+  )
+  
+  trained = list(s1=model(training$s1, formula),
+                 s2=model(training$s2, formula),
+                 s3=model(training$s3, formula),
+                 s4=model(training$s4, formula)
+  )
+  
+  accuracy <- (ml_evaluate(trained$s1, dataset$s1)$Accuracy +
+                    ml_evaluate(trained$s2, dataset$s2)$Accuracy +
+                    ml_evaluate(trained$s3, dataset$s3)$Accuracy +
+                    ml_evaluate(trained$s4, dataset$s4)$Accuracy
+  ) / 4
+}
+
+bayes_k4_accuracy <- k4c(df, ml_naive_bayes, formula)
+svc_k4_accuracy <- k4c(df, ml_linear_svc, formula)
+d3_k4_accuracy <- k4c(df, ml_decision_tree_classifier, formula)
+
+# Table View
+knitr::kable(array(c("Bayes", "SVC", "Decision Tree",
+                     bayes_accuracy, svc_accuracy, d3_accuracy,
+                     bayes_k4_accuracy, svc_k4_accuracy, d3_accuracy),
+                   dim = c(3, 3)),
+             col.names = c("Models", "Accuracy", "4-Cross Accuracy"),
+             label = "Comparing accuracy of different models",
+             align = "ccc",
+             format = "html"
+)
 
 # End the session
 #spark_disconnect(sc)

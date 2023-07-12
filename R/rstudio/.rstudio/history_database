@@ -2187,3 +2187,119 @@
 1689194204374:}
 1689194224348:# Sanity
 1689194224350:result_data
+1689194582583:# Plotting Accuracy
+1689194582584:plot3 <- result_data %>%
+1689194582584:ggplot(aes(i, wp, color = wp)) +
+1689194582584:geom_line(linewidth = 2) +
+1689194582584:scale_x_continuous(breaks = 1:max_iterations) +
+1689194582585:scale_y_continuous(breaks = result_data$roc) +
+1689194582585:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689194582585:theme(text = element_text(size = 16)) +
+1689194582585:labs(x = "Num of iterations", y = "ROC", title = "a) Accuracy dependency on number of iterations")
+1689194586116:plot3
+1689194589616:plot3
+1689194594601:# Plotting Accuracy
+1689194594602:plot3 <- result_data %>%
+1689194594603:ggplot(aes(i, wp, color = wp)) +
+1689194594603:geom_line(linewidth = 2) +
+1689194594603:scale_x_continuous(breaks = 1:max_iterations) +
+1689194594603:scale_y_continuous(breaks = result_data$a) +
+1689194594604:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689194594604:theme(text = element_text(size = 16)) +
+1689194594604:labs(x = "Num of iterations", y = "Accuracy", title = "a) Accuracy dependency on number of iterations")
+1689194597692:plot3
+1689194706055:# Check the split out
+1689194706056:df_split
+1689194759695:bayes_model <- df_split$training %>% ml_naive_bayes(formula)
+1689194875811:# Linear SVC classification
+1689194875813:linear_svc_model <- df_split$training %>%
+1689194875813:ml_linear_svc(formula)
+1689194949362:# Decision 3 classification
+1689194949363:decision_tree_classifier <- df_split$training %>%
+1689194949364:ml_decision_tree_classifier(formula)
+1689195106699:# Sanity
+1689195106699:result_data
+1689195260714:# Testing F1 Score for different methods
+1689195260716:bayes_f1 <- ml_evaluate(bayes_model, df_split$test)
+1689195265446:bayes_f1
+1689195293750:bayes_f1 <- bayes_f1$Accuracy
+1689195300277:bayes_f1
+1689195315276:# Testing F1 Score for different methods
+1689195315277:bayes_f1 <- ml_evaluate(bayes_model, df_split$test)$Accuracy
+1689195402161:svc_accuracy <- ml_evaluate(liner_svc_model, df_split$test)$Accuracy
+1689195424109:# Testing F1 Score for different methods
+1689195424110:bayes_accuracy <- ml_evaluate(bayes_model, df_split$test)$Accuracy
+1689195425751:svc_accuracy <- ml_evaluate(linear_svc_model, df_split$test)$Accuracy
+1689195427484:d3_accuracy <- ml_evaluate(decision_tree_classifier, df_split$test)$Accuracy
+1689195697156:View(df)
+1689195966103:# Testing Accuracy Score for different methods using 4-cross validation
+1689195966105:k4 <- function(dataset, model, formula){
+1689195966105:dataset <- dataset %>%
+1689195966105:sdf_random_split(seed=1,
+1689195966106:s1=0.25,
+1689195966106:s2=0.25,
+1689195966107:s3=0.25,
+1689195966107:s4=0.25)
+1689195966107:training <- list(
+1689195966108:s1 = sdf_bind_rows(dataset$s2, dataset$s3, dataset$s4),
+1689195966109:s2 = sdf_bind_rows(dataset$s1, dataset$s3, dataset$s4),
+1689195966109:s3 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s4),
+1689195966109:s4 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s3)
+1689195966110:)
+1689195966111:trained = list(s1=model(training$s1, formula),
+1689195966111:s2=model(training$s2, formula),
+1689195966112:s3=model(training$s3, formula),
+1689195966112:s4=model(training$s4, formula)
+1689195966113:)
+1689195966114:accuracy <- (ml_evaluate(trained$s1, dataset$s1)$Accuracy +
+1689195966114:ml_evaluate(trained$s2, dataset$s2)$Accuracy +
+1689195966115:ml_evaluate(trained$s3, dataset$s3)$Accuracy +
+1689195966116:ml_evaluate(trained$s4, dataset$s4)$Accuracy
+1689195966116:) / 4
+1689195966117:}
+1689196085565:bayes_k4_accuracy <- k4c(df, ml_naive_bayes, formula)
+1689196091517:# Testing Accuracy Score for different methods using 4-cross validation
+1689196091518:k4c <- function(dataset, model, formula){
+1689196091519:dataset <- dataset %>%
+1689196091519:sdf_random_split(seed=1,
+1689196091520:s1=0.25,
+1689196091520:s2=0.25,
+1689196091520:s3=0.25,
+1689196091521:s4=0.25)
+1689196091521:training <- list(
+1689196091522:s1 = sdf_bind_rows(dataset$s2, dataset$s3, dataset$s4),
+1689196091522:s2 = sdf_bind_rows(dataset$s1, dataset$s3, dataset$s4),
+1689196091523:s3 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s4),
+1689196091523:s4 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s3)
+1689196091523:)
+1689196091524:trained = list(s1=model(training$s1, formula),
+1689196091525:s2=model(training$s2, formula),
+1689196091525:s3=model(training$s3, formula),
+1689196091525:s4=model(training$s4, formula)
+1689196091526:)
+1689196091526:accuracy <- (ml_evaluate(trained$s1, dataset$s1)$Accuracy +
+1689196091526:ml_evaluate(trained$s2, dataset$s2)$Accuracy +
+1689196091527:ml_evaluate(trained$s3, dataset$s3)$Accuracy +
+1689196091527:ml_evaluate(trained$s4, dataset$s4)$Accuracy
+1689196091527:) / 4
+1689196091527:}
+1689196094014:bayes_k4_accuracy <- k4c(df, ml_naive_bayes, formula)
+1689196122464:svc_k4_accuracy <- k4c(df, ml_linear_svc, formula)
+1689196435019:d3_k4_accuracy <- k4c(df, ml_decision_tree_classifier, formula)
+1689196504534:# Show selected data
+1689196504536:kable(head(df, n = 10L),
+1689196504536:col.names = colnames(df),
+1689196504536:caption = "Table view of filtered data",
+1689196504536:format = "html",
+1689196504537:align = "c"
+1689196504537:)
+1689196657345:# Table View
+1689196657346:knitr::kable(array(c("Bayes", "SVC", "Decision Tree",
+1689196657346:bayes_accuracy, svc_accuracy, d3_accuracy,
+1689196657347:bayes_k4_accuracy, svc_k4_accuracy, d3_accuracy),
+1689196657347:dim = c(3, 3)),
+1689196657347:col.names = c("Models", "Accuracy", "4-Cross Accuracy"),
+1689196657347:label = "Comparing accuracy of different models",
+1689196657348:align = "ccc",
+1689196657348:format = "html"
+1689196657348:)
