@@ -2471,3 +2471,33 @@
 1689199754267:cplot_10
 1689199755246:cplot_20
 1689199774225:View(cp1)
+1689199949400:spin()
+1689199997847:spin("classification.r")
+1689200151197:cplot_20
+1689200155969:model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
+1689200165722:model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
+1689200173815:cplot_20 <- model_20$centers %>%
+1689200173833:ggplot(aes(diameter, e, color=e)) +
+1689200173834:geom_point(size=5) +
+1689200173834:scale_color_gradientn(colors = rainbow(10)) +
+1689200173834:theme(text = element_text(size=16)) +
+1689200173834:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=20-means")
+1689200175768:cplot_20
+1689200260992:---
+1689200261009:title: "R Notebook"
+1689200261010:output: html_notebook
+1689200261010:---
+1689200261011:This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
+1689200261012:Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
+1689200261013:```{r}
+1689200261013:plot(cars)
+1689200261064:```
+1689200261064:Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+1689200261065:When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+1689200261066:The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+1689200269922:plot(cars)
+1689200313088:---
+1689200313088:title: "R Notebook"
+1689200313089:output: html_notebook
+1689200313094:---
+1689200313095:install.packages("rmarkdown")

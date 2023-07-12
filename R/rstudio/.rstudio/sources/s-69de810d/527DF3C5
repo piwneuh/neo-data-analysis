@@ -7,13 +7,14 @@
     "folds" : "",
     "hash" : "0",
     "id" : "527DF3C5",
-    "lastKnownWriteTime" : 1689199736,
-    "last_content_update" : 1689199736899,
+    "lastKnownWriteTime" : 1689199974,
+    "last_content_update" : 1689199974342,
     "path" : "~/classification.r",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "265,0",
-        "scrollLine" : "232",
+        "cursorPosition" : "57,24",
+        "notebook_format" : "html_document",
+        "scrollLine" : "52",
         "tempName" : "Untitled1"
     },
     "read_only" : false,
