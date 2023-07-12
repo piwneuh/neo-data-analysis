@@ -411,3 +411,79 @@
 1689162844489:))
 1689162867839:# Sanity columns
 1689162867841:colnames(df)
+1689167979628:library(sparklyr)
+1689167988155:library(dplyr)
+1689167991487:library(tidyr)
+1689167995119:library(ggplot2)
+1689167997098:library(magrittr)
+1689167998673:library(knitr)
+1689168006647:library(sparklyr)
+1689168016855:# Install
+1689168016857:spark_install()
+1689168056174:install.packages("sparklyr")
+1689168089419:install.packages("sparklyr", repos="https://cran.rstudio.com")
+1689168145466:library(sparklyr)
+1689168260753:# Install
+1689168260755:spark_install()
+1689168269279:# Install
+1689168269297:spark_install()
+1689168284860:sc <- sparklyr::spark_connect(master = "local")
+1689168295985:datasetPath <- "/data/dataset.csv"
+1689168300126:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689168316633:# Columns
+1689168316634:colnames(df)
+1689168465443:# Filter data
+1689168465444:df <- df %>%
+1689168465445:filter(!is.na(diameter_sigma))
+1689168471032:# Exclude the "prefix" column
+1689168471033:df <- select(df, -prefix)
+1689168490258:# Columns sanity
+1689168490260:colnames(df)
+1689168500835:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689168500837:df <- df %>%
+1689168500837:mutate(abs_mag_category = case_when(
+1689168500838:H < 15 ~ "Very Bright",
+1689168500838:H >= 15 & H < 20 ~ "Moderately Bright",
+1689168500839:TRUE ~ "Dim"
+1689168500839:))
+1689168502344:# Create a new column that categorizes asteroids into different orbit class categories based on their orbit class
+1689168502345:df <- df %>%
+1689168502346:mutate(orbit_class_category = case_when(
+1689168502346:startsWith(orbit_id, "M") ~ "Main Belt",
+1689168502347:startsWith(orbit_id, "O") ~ "Outer Solar System",
+1689168502347:startsWith(orbit_id, "I") ~ "Inner Solar System",
+1689168502348:TRUE ~ "Unknown"
+1689168502348:))
+1689168513367:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689168513368:df <- df %>%
+1689168513369:mutate(size_category = case_when(
+1689168513369:diameter < 1 ~ "Small",
+1689168513370:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689168513370:diameter > 10 ~ "Large",
+1689168513371:TRUE ~ "Unknown"
+1689168513371:))
+1689168547390:# Create a new column that categorizes asteroids into different orbit class categories based on their orbit class
+1689168547392:df <- df %>%
+1689168547392:mutate(orbit_class_category = case_when(
+1689168547393:"M" ~ "Main Belt",
+1689168547393:"O" ~ "Outer Solar System",
+1689168547394:"I" ~ "Inner Solar System",
+1689168547394:TRUE ~ "Unknown"
+1689168547395:))
+1689168634038:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689168634040:df <- df %>%
+1689168634040:mutate(abs_mag_category = case_when(
+1689168634040:H < 15 ~ "Very Bright",
+1689168634041:H >= 15 & H < 20 ~ "Moderately Bright",
+1689168634041:TRUE ~ "Dim"
+1689168634041:))
+1689168636299:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689168636301:df <- df %>%
+1689168636301:mutate(size_category = case_when(
+1689168636302:diameter < 1 ~ "Small",
+1689168636302:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689168636302:diameter > 10 ~ "Large",
+1689168636303:TRUE ~ "Unknown"
+1689168636303:))
+1689168639370:# Sanity columns
+1689168639371:colnames(df)

@@ -1,7 +1,7 @@
 install.packages("tidyverse", repos = "https://cran.rstudio.com/")
 install.packages("gridExtra", repos = "https://cran.rstudio.com/")
-install.packages("kableExtra", repos = "https://cran.rsdtuio.com/")
-
+install.packages("kableExtra", repos = "https://cran.rstudio.com/")
+install.packages("sparklyr", repos="https://cran.rstudio.com")
 
 library(sparklyr)
 library(dplyr)
@@ -25,21 +25,22 @@ glimpse(df)
 # Columns
 colnames(df)
 
+# Filter data
+df <- df %>%
+  filter(!is.na(diameter_sigma))
+
+# Exclude the "prefix" column
+df <- select(df, -prefix)
+
+# Columns sanity
+colnames(df)
+
 # Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
 df <- df %>%
   mutate(abs_mag_category = case_when(
     H < 15 ~ "Very Bright",
     H >= 15 & H < 20 ~ "Moderately Bright",
     TRUE ~ "Dim"
-  ))
-
-# Create a new column that categorizes asteroids into different orbit class categories based on their orbit class
-df <- df %>%
-  mutate(orbit_class_category = case_when(
-    startsWith(orbit_id, "M") ~ "Main Belt",
-    startsWith(orbit_id, "O") ~ "Outer Solar System",
-    startsWith(orbit_id, "I") ~ "Inner Solar System",
-    TRUE ~ "Unknown"
   ))
 
 # Create a new column that categorizes asteroids into different size categories based on their diameter (km)
