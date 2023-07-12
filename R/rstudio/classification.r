@@ -19,25 +19,19 @@ sc <- sparklyr::spark_connect(master = "local")
 datasetPath <- "/data/dataset.csv"
 df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
 
-# Sanity
-glimpse(df)
-
-# Columns
-colnames(df)
-
 # Filter data
 df <- df %>%
-  filter(!is.na(diameter_sigma))
-
-# Exclude the "prefix" column
-df <- select(df, -prefix)
-
-# Columns sanity
-colnames(df)
+  filter(!is.na(diameter_sigma) ||
+          !is.na(albedo) ||
+          !is.na(H) ||
+          !is.na(diameter)||
+          !is.na(epoch) ||
+          !is.na(name)
+           )
 
 # Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
 df <- df %>%
-  mutate(abs_mag_category = case_when(
+  mutate(brightness = case_when(
     H < 15 ~ "Very Bright",
     H >= 15 & H < 20 ~ "Moderately Bright",
     TRUE ~ "Dim"
@@ -51,11 +45,17 @@ df <- df %>%
     diameter > 10 ~ "Large",
     TRUE ~ "Unknown"
   ))
+# H devided by 5 (needed for formula)
+df <- df %>%
+  mutate(H_devided = H / 5)
 
 # Sanity columns
 colnames(df)
 
-# Show data
+# Select most relevant data for further analising
+df <- df %>% select(name, albedo, H, H_devided, diameter, diameter_sigma, epoch, brightness, size_category)
+
+# Show selected data
 kable(head(df, n = 10L),
       col.names = colnames(df),
       caption = "Table view of filtered data",
@@ -64,13 +64,16 @@ kable(head(df, n = 10L),
 )
 
 # Data split
-df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+df_split <- sdf_random_split(dataset, training = 0.7, test = 0.3)
 
 # Check the split out
 df_split
 
+# Formula
+formula <- ((1329 * 10 ^(-H/5))/diameter)^2
+
 # Regression
-model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter", "H"))
+model1 <- ml_logistic_regression(df_split$training, label_col = "albedo", features_col = c("diameter"))
 
 # Traing the model
 m1 <- ml_fit(model1, df_split$training)

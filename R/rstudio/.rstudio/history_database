@@ -613,3 +613,344 @@
 1689171995054:align = "c"
 1689171995054:) %>%
 1689171995055:kableExtra::kable_styling(bootstrap_options = "bordered", full_width = F, font_size = 16)
+1689172960644:spark_disconnect(df_spark)
+1689172981279:# Show data
+1689172981280:kable(head(df, n = 10L),
+1689172981281:col.names = colnames(df),
+1689172981281:caption = "Table view of filtered data",
+1689172981282:format = "html",
+1689172981282:align = "c"
+1689172981283:)
+1689173072608:# Regression
+1689173072610:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter", "H"))
+1689173079819:# Regression
+1689173079820:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter"))
+1689173082396:# Traing the model
+1689173082397:m1 <- ml_fit(model1, df_split$training)
+1689173087672:# Regression
+1689173087674:model1 <- ml_logistic_regression(df, label_col = "albedo", features_col = c("diameter"))
+1689173543074:slelect(albedo, H, diameter, full_name)
+1689173547741:select(albedo, H, diameter, full_name)
+1689173586870:df %>% select(albedo, H, diameter, full_name)
+1689173601631:df
+1689173655048:# Select data for further testing
+1689173655050:dataset <- df %>% select(albedo, H, diameter, full_name)
+1689173667661:# Data split
+1689173667679:df_split <- sdf_random_split(dataset, training = 0.7, test = 0.3)
+1689173670843:# Check the split out
+1689173670845:df_split
+1689173714238:# Filter data
+1689173714240:df <- df %>%
+1689173714240:filter(!is.na(diameter_sigma)||
+1689173714241:!is.na(albedo))
+1689173728525:# Filter data
+1689173728527:df <- df %>%
+1689173728527:filter(!is.na(diameter_sigma)||
+1689173728528:!is.na(albedo))
+1689173734497:# Exclude the "prefix" column
+1689173734499:df <- select(df, -prefix)
+1689173756604:# Select data for further testing
+1689173756605:dataset <- df %>% select(albedo, H, diameter, full_name)
+1689173760114:# Data split
+1689173760115:df_split <- sdf_random_split(dataset, training = 0.7, test = 0.3)
+1689173762139:# Check the split out
+1689173762141:df_split
+1689173807029:# Formula
+1689173807031:formula <- (1329 * 10 ^ (-H/5))/diameter)^2
+1689173818740:# Formula
+1689173818741:formula <- ((1329 * 10 ^ (-H/5))/diameter)^2)
+1689173827862:# Formula
+1689173827862:formula <- ((1329 * 10 ^(-H/5))/diameter)^2)
+1689174346812:# End the session
+1689174346813:spark_disconnect(sc)
+1689174354058:View(dataset)
+1689174414011:# Install
+1689174414012:spark_install()
+1689174420816:# Connect
+1689174420817:sc <- sparklyr::spark_connect(master = "local")
+1689174473986:# Connect
+1689174473988:sc <- sparklyr::spark_connect(master = "local")
+1689174484423:datasetPath <- "/data/dataset.csv"
+1689174486582:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689174653775:# Filter data
+1689174653776:df <- df %>%
+1689174653777:filter(!is.na(diameter_sigma) ||
+1689174653777:!is.na(albedo) ||
+1689174653777:!is.na(H) ||
+1689174653777:!is.na(diameter)||
+1689174653778:!is.na(epoch) ||
+1689174653778:!is.na(full_name)
+1689174653778:)
+1689174659318:View(df)
+1689174670485:# Columns sanity
+1689174670486:colnames(df)
+1689174695166:df
+1689174839488:# Create a new column with H divided by 5
+1689174839490:df <- df %>%
+1689174839491:mutate(new_column = withColumn("new_column", df$H / 5))
+1689174855724:# Create a new column with H divided by 5
+1689174855726:df <- df %>%
+1689174855726:mutate(new_column = withColumn("H/5", df$H / 5))
+1689174925127:# Create a new column with H divided by 5
+1689174925129:df <- df %>%
+1689174925129:mutate(H/5 = H / 5)
+1689174935521:# Create a new column with H divided by 5
+1689174935522:df <- df %>%
+1689174935523:mutate(H/5 ~ H / 5)
+1689174942529:# Create a new column with H divided by 5
+1689174942529:df <- df %>%
+1689174942530:mutate(H5 ~ H / 5)
+1689174953465:# Create a new column with H divided by 5
+1689174953467:df <- df %>%
+1689174953467:mutate(new_column ~ H / 5)
+1689174975088:# Create a new column with H divided by 5
+1689174975090:df <- df %>%
+1689174975090:mutate(new_column = H / 5)
+1689174989011:colnames(df)
+1689175055287:rename(new_column = H5)
+1689175066043:rename(new_column = "h_5")
+1689175071971:rename(new_column = h_5)
+1689175089588:rename(new_column = h)
+1689175116470:# Create a new column with H divided by 5 (latter used in the formula)
+1689175116472:df <- df %>%
+1689175116472:mutate(new_column = H / 5) %>%
+1689175116473:rename(new_column = h)
+1689175133919:# Create a new column with H divided by 5 (latter used in the formula)
+1689175133920:df <- df %>%
+1689175133921:mutate(new_column = H / 5) %>%
+1689175133921:rename(h = new_column)
+1689175142071:colnames(df)
+1689175150839:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175150841:df <- df %>%
+1689175150842:mutate(abs_mag_category = case_when(
+1689175150842:H < 15 ~ "Very Bright",
+1689175150843:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175150843:TRUE ~ "Dim"
+1689175150844:))
+1689175186165:# Create a new column with H divided by 5 (latter used in the formula)
+1689175186183:df <- df %>%
+1689175186184:mutate(new_column = H / 5) %>%
+1689175186184:rename(H5 = new_column)
+1689175193123:# Create a new column with H divided by 5 (latter used in the formula)
+1689175193124:df <- df %>%
+1689175193125:mutate(new_column = H / 5) %>%
+1689175193125:rename(H5 = h)
+1689175208710:# Create a new column with H divided by 5 (latter used in the formula)
+1689175208712:df <- df %>%
+1689175208712:mutate(new_column = H / 5) %>%
+1689175208713:rename(h = new_column)
+1689175215501:colnames(h)
+1689175221598:colnames(df)
+1689175229917:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175229918:df <- df %>%
+1689175229919:mutate(abs_mag_category = case_when(
+1689175229920:H < 15 ~ "Very Bright",
+1689175229920:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175229921:TRUE ~ "Dim"
+1689175229921:))
+1689175249142:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175249144:df <- df %>%
+1689175249145:mutate(abs_mag_category = case_when(
+1689175249145:df$H < 15 ~ "Very Bright",
+1689175249146:df$H >= 15 & df$H < 20 ~ "Moderately Bright",
+1689175249146:TRUE ~ "Dim"
+1689175249147:))
+1689175259887:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175259888:df <- df %>%
+1689175259889:mutate(abs_mag_category = case_when(
+1689175259889:H < 15 ~ "Very Bright",
+1689175259890:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175259890:TRUE ~ "Dim"
+1689175259891:))
+1689175320494:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689175320495:df <- df %>%
+1689175320496:mutate(size_category = case_when(
+1689175320496:diameter < 1 ~ "Small",
+1689175320497:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689175320498:diameter > 10 ~ "Large",
+1689175320498:TRUE ~ "Unknown"
+1689175320499:))
+1689175331327:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175331328:df <- df %>%
+1689175331329:mutate(abs_mag_category = case_when(
+1689175331329:h < 15 ~ "Very Bright",
+1689175331330:h >= 15 & h < 20 ~ "Moderately Bright",
+1689175331330:TRUE ~ "Dim"
+1689175331331:))
+1689175367379:df <- df %>% rename(H5 = h)
+1689175376946:colnames(df
+1689175376948:)
+1689175393547:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175393548:df <- df %>%
+1689175393548:mutate(abs_mag_category = case_when(
+1689175393549:H < 15 ~ "Very Bright",
+1689175393549:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175393550:TRUE ~ "Dim"
+1689175393550:))
+1689175419877:# Create a new column with H divided by 5 (latter used in the formula)
+1689175419879:df <- df %>%
+1689175419880:rename(h = H5)
+1689175452951:# End the session
+1689175452953:spark_disconnect(sc)
+1689175465582:# Connect
+1689175465584:sc <- sparklyr::spark_connect(master = "local")
+1689175491032:datasetPath <- "/data/dataset.csv"
+1689175491773:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689175519948:# Filter data
+1689175519950:df <- df %>%
+1689175519951:filter(!is.na(diameter_sigma) ||
+1689175519951:!is.na(albedo) ||
+1689175519952:!is.na(H) ||
+1689175519952:!is.na(diameter)||
+1689175519953:!is.na(epoch) ||
+1689175519953:!is.na(full_name)
+1689175519954:)
+1689175524359:# Create a new column with H divided by 5 (latter used in the formula)
+1689175524360:df <- df %>%
+1689175524361:mutate(new_column = H / 5) %>%
+1689175524361:rename(h = new_column)
+1689175537270:colnames(df)
+1689175550156:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175550158:df <- df %>%
+1689175550158:mutate(abs_mag_category = case_when(
+1689175550159:H < 15 ~ "Very Bright",
+1689175550160:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175550160:TRUE ~ "Dim"
+1689175550161:))
+1689175575570:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175575572:df <- df %>%
+1689175575572:mutate(abs_mag_category = case_when(
+1689175575573:df$H < 15 ~ "Very Bright",
+1689175575573:df$H >= 15 & df$H < 20 ~ "Moderately Bright",
+1689175575574:TRUE ~ "Dim"
+1689175575575:))
+1689175597377:df
+1689175605041:df
+1689175637242:# End the session
+1689175637243:spark_disconnect(sc)
+1689175650731:# Connect
+1689175650749:sc <- sparklyr::spark_connect(master = "local")
+1689175660200:datasetPath <- "/data/dataset.csv"
+1689175660203:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689175669188:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689175680389:# Filter data
+1689175680391:df <- df %>%
+1689175680391:filter(!is.na(diameter_sigma) ||
+1689175680392:!is.na(albedo) ||
+1689175680392:!is.na(H) ||
+1689175680393:!is.na(diameter)||
+1689175680393:!is.na(epoch) ||
+1689175680394:!is.na(full_name)
+1689175680394:)
+1689175684389:df
+1689175744492:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175744494:df <- df %>%
+1689175744494:mutate(abs_mag_category = case_when(
+1689175744495:df$H < 15 ~ "Very Bright",
+1689175744495:df$H >= 15 & df$H < 20 ~ "Moderately Bright",
+1689175744496:TRUE ~ "Dim"
+1689175744496:))
+1689175758566:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175758568:df <- df %>%
+1689175758568:mutate(abs_mag_category = case_when(
+1689175758569:H < 15 ~ "Very Bright",
+1689175758570:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175758570:TRUE ~ "Dim"
+1689175758571:))
+1689175761525:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689175761526:df <- df %>%
+1689175761527:mutate(size_category = case_when(
+1689175761527:diameter < 1 ~ "Small",
+1689175761528:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689175761528:diameter > 10 ~ "Large",
+1689175761529:TRUE ~ "Unknown"
+1689175761529:))
+1689175763582:# Sanity columns
+1689175763583:colnames(df)
+1689175879010:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689175879012:df <- df %>%
+1689175879013:mutate(brightness = case_when(
+1689175879013:H < 15 ~ "Very Bright",
+1689175879014:H >= 15 & H < 20 ~ "Moderately Bright",
+1689175879014:TRUE ~ "Dim"
+1689175879015:))
+1689175894549:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689175894550:df <- df %>%
+1689175894551:mutate(size_category = case_when(
+1689175894551:diameter < 1 ~ "Small",
+1689175894552:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689175894552:diameter > 10 ~ "Large",
+1689175894553:TRUE ~ "Unknown"
+1689175894553:))
+1689175912355:# Select most relevant data for further analising
+1689175912356:df <- df %>% select(albedo, H, diameter, diameter_sigma, epoch, full_name, brightness, size_category)
+1689175918599:# Show data
+1689175918600:kable(head(df, n = 10L),
+1689175918601:col.names = colnames(df),
+1689175918602:caption = "Table view of filtered data",
+1689175918602:format = "html",
+1689175918603:align = "c"
+1689175918603:)
+1689176018963:# Select most relevant data for further analising
+1689176018965:df <- df %>% select(name, albedo, H, diameter, diameter_sigma, epoch, brightness, size_category)
+1689176023989:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689176031327:# Filter data
+1689176031327:df <- df %>%
+1689176031328:filter(!is.na(diameter_sigma) ||
+1689176031328:!is.na(albedo) ||
+1689176031329:!is.na(H) ||
+1689176031329:!is.na(diameter)||
+1689176031330:!is.na(epoch) ||
+1689176031330:!is.na(name)
+1689176031331:)
+1689176034039:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689176034042:df <- df %>%
+1689176034043:mutate(brightness = case_when(
+1689176034044:H < 15 ~ "Very Bright",
+1689176034044:H >= 15 & H < 20 ~ "Moderately Bright",
+1689176034045:TRUE ~ "Dim"
+1689176034045:))
+1689176036548:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689176036549:df <- df %>%
+1689176036550:mutate(size_category = case_when(
+1689176036550:diameter < 1 ~ "Small",
+1689176036551:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689176036551:diameter > 10 ~ "Large",
+1689176036552:TRUE ~ "Unknown"
+1689176036552:))
+1689176039348:# Sanity columns
+1689176039350:colnames(df)
+1689176088975:# H devided by 5 (needed for formula)
+1689176088976:df <- df %>%
+1689176088977:mutate(new_column = H / 5)
+1689176090750:# Sanity columns
+1689176090752:colnames(df)
+1689176094453:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689176094455:df <- df %>%
+1689176094455:mutate(size_category = case_when(
+1689176094456:diameter < 1 ~ "Small",
+1689176094456:diameter >= 1 & diameter <= 10 ~ "Medium",
+1689176094457:diameter > 10 ~ "Large",
+1689176094457:TRUE ~ "Unknown"
+1689176094458:))
+1689176096669:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689176096669:df <- df %>%
+1689176096670:mutate(brightness = case_when(
+1689176096670:H < 15 ~ "Very Bright",
+1689176096671:H >= 15 & H < 20 ~ "Moderately Bright",
+1689176096672:TRUE ~ "Dim"
+1689176096672:))
+1689176108932:# H devided by 5 (needed for formula)
+1689176108932:df <- df %>%
+1689176108933:mutate(H_devided = H / 5)
+1689176111495:# Sanity columns
+1689176111497:colnames(df)
+1689176123399:# Select most relevant data for further analising
+1689176123400:df <- df %>% select(name, albedo, H, H_devided, diameter, diameter_sigma, epoch, brightness, size_category)
+1689176125899:# Show selected data
+1689176125901:kable(head(df, n = 10L),
+1689176125902:col.names = colnames(df),
+1689176125902:caption = "Table view of filtered data",
+1689176125903:format = "html",
+1689176125903:align = "c"
+1689176125904:)
