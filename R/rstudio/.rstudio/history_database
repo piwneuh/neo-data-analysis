@@ -1899,3 +1899,291 @@
 1689189436499:results[[1]]$accuracy()
 1689189446039:results[[1]]$weighted_precision()
 1689189479575:results[[1]]$weighted_recall()
+1689191001487:# Plottin'
+1689191001488:df <- data.frame(
+1689191001489:i = 1:max_iterations,
+1689191001489:wp = sapply(results, function(x) x$weighted.precision),
+1689191001490:wr = sapply(results, function(x) x$weighted.recall),
+1689191001490:wf = sapply(results, function(x) x$weighted.f.measure),
+1689191001491:aur = sapply(results, function(x) x$area.under.roc),
+1689191001492:a = sapply(results, function(x) x$accuracy)
+1689191001492:)
+1689191488623:# Plottin'
+1689191488625:result_data <- data.frame(
+1689191488625:i=max_iterations,
+1689191488626:wp=results[[1]]$weighted_precision(),
+1689191488626:wr=results[[1]]$weighted_recall(),
+1689191488627:a=results[[1]]$accuracy())
+1689191491254:plot1 <- result_data %>%
+1689191491256:ggplot(aes(i, wp, color=wp)) +
+1689191491256:geom_line(size=2) +
+1689191491257:scale_x_continuous(breaks=max_iterations) +
+1689191491257:scale_y_continuous(breaks=results[[1]]$weighted_precision()) +
+1689191491258:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689191491258:theme(text = element_text(size = 16)) +
+1689191491259:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689191510187:plot1 <- result_data %>%
+1689191510188:ggplot(aes(i, wp, color=wp)) +
+1689191510189:geom_line(linewidth=2) +
+1689191510190:scale_x_continuous(breaks=max_iterations) +
+1689191510190:scale_y_continuous(breaks=results[[1]]$weighted_precision()) +
+1689191510191:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689191510191:theme(text = element_text(size = 16)) +
+1689191510192:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689191529951:plot1
+1689191872787:View(results)
+1689191920226:# Plottin'
+1689191920228:result_data <- data.frame(
+1689191920228:i=max_iterations,
+1689191920229:wp=results[[1:5]]$weighted_precision(),
+1689191920229:wr=results[[1:5]]$weighted_recall(),
+1689191920230:a=results[[1:5]]$accuracy())
+1689191930217:plot1 <- result_data %>%
+1689191930218:ggplot(aes(i, wp, color=wp)) +
+1689191930219:geom_line(linewidth=2) +
+1689191930219:scale_x_continuous(breaks=max_iterations) +
+1689191930220:scale_y_continuous(breaks=results[[1:5]]$weighted_precision()) +
+1689191930220:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689191930221:theme(text = element_text(size = 16)) +
+1689191930222:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689192209125:results[[1]]$weighted_recall()
+1689192236609:result_data <- do.call(rbind, results)
+1689192242775:result_data
+1689192338267:results[[1]]$weighted_recall()
+1689192371625:# Plottin'
+1689192371627:result_data <- data.frame(
+1689192371627:i=max_iterations,
+1689192371628:wp=results[[i]]$weighted_precision(),
+1689192371628:wr=results[[i]]$weighted_recall(),
+1689192371628:a=results[[i]]$accuracy())
+1689192377767:result_data
+1689192401032:# Plottin'
+1689192401034:result_data <- data.frame(
+1689192401034:i= 1:max_iterations,
+1689192401035:wp=results[[i]]$weighted_precision(),
+1689192401035:wr=results[[i]]$weighted_recall(),
+1689192401036:a=results[[i]]$accuracy())
+1689192407321:result_data
+1689192437011:plot1 <- result_data %>%
+1689192437012:ggplot(aes(i, wp, color=wp)) +
+1689192437012:geom_line(linewidth=2) +
+1689192437013:scale_x_continuous(breaks=max_iterations) +
+1689192437013:scale_y_continuous(breaks=results[[i]]$weighted_precision()) +
+1689192437013:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689192437013:theme(text = element_text(size = 16)) +
+1689192437013:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689192439508:plot1
+1689192506560:# Plottin'
+1689192506561:result_data <- data.frame(
+1689192506562:i= c(1:max_iterations),
+1689192506562:wp=results[[i]]$weighted_precision(),
+1689192506562:wr=results[[i]]$weighted_recall(),
+1689192506563:a=results[[i]]$accuracy())
+1689192511171:plot1 <- result_data %>%
+1689192511173:ggplot(aes(i, wp, color=wp)) +
+1689192511173:geom_line(linewidth=2) +
+1689192511174:scale_x_continuous(breaks=max_iterations) +
+1689192511174:scale_y_continuous(breaks=results[[i]]$weighted_precision()) +
+1689192511174:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689192511175:theme(text = element_text(size = 16)) +
+1689192511175:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689192512186:plot1
+1689192525999:result_data
+1689192590497:results <- data.frame(
+1689192590498:i=c(1:max_iterations),
+1689192590499:wp=c(),
+1689192590499:wr=c(),
+1689192590500:a=c()
+1689192590500:)
+1689192610793:results <- data.frame(
+1689192610795:i=c(1:max_iterations),
+1689192610795:wp=c(,5),
+1689192610796:wr=c(,5),
+1689192610796:a=c(,5)
+1689192610796:)
+1689192636453:results <- data.frame(
+1689192636455:i=c(),
+1689192636455:wp=c(),
+1689192636456:wr=c(),
+1689192636456:a=c()
+1689192636456:)
+1689192776990:for (i in 1:max_iterations) {
+1689192776992:# Traing the model
+1689192776992:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689192776992:# Evaluate the model
+1689192776992:result <- ml_evaluate(model, df_split$test)
+1689192776993:# Save results
+1689192776993:i[i] <- i
+1689192776993:results$wp[i] <- result$weighted_precision()
+1689192776994:results$wr[i] <- result$weighted_recall()
+1689192776994:results$a[i] <- result$accuracy()
+1689192776994:}
+1689192869321:for (i in 1:max_iterations) {
+1689192869323:# Traing the model
+1689192869323:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689192869323:# Evaluate the model
+1689192869324:result <- ml_evaluate(model, df_split$test)
+1689192869324:# Save results
+1689192869324:i[i] <- i
+1689192869325:results$wp[i] <- result$weighted_precision()
+1689192869325:results$wr[i] <- result$weighted_recall()
+1689192869325:results$a[i] <- result$accuracy()
+1689192869326:}
+1689192891586:# Plottin'
+1689192891588:result_data <- data.frame(
+1689192891588:i= 1:max_iterations,
+1689192891588:wp=results[[i]]$weighted_precision(),
+1689192891589:wr=results[[i]]$weighted_recall(),
+1689192891589:a=results[[i]]$accuracy()
+1689192891590:)
+1689192910199:View(result)
+1689192917054:View(results)
+1689192927910:results[[1]]$weighted_recall()
+1689192931040:for (i in 1:max_iterations) {
+1689192931041:# Traing the model
+1689192931041:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689192931042:# Evaluate the model
+1689192931042:result <- ml_evaluate(model, df_split$test)
+1689192931043:# Save results
+1689192931043:results[[i]] <- result
+1689192931043:}
+1689192952033:for (i in 1:max_iterations) {
+1689192952035:# Traing the model
+1689192952035:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689192952036:# Evaluate the model
+1689192952036:result <- ml_evaluate(model, df_split$test)
+1689192952037:# Save results
+1689192952037:results[[i]] <- result
+1689192952038:}
+1689192959488:# Logistic regression with different max iterations
+1689192959490:max_iterations <- 5
+1689192960378:results <- vector("list", max_iterations)
+1689192961696:for (i in 1:max_iterations) {
+1689192961698:# Traing the model
+1689192961698:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689192961699:# Evaluate the model
+1689192961699:result <- ml_evaluate(model, df_split$test)
+1689192961700:# Save results
+1689192961700:results[[i]] <- result
+1689192961701:}
+1689192968931:results[[1]]$weighted_recall()
+1689192974383:results[[5]]$weighted_recall()
+1689192998885:View(results)
+1689193176136:# Plottin'
+1689193176138:result_data <- data.frame(
+1689193176138:i= c(1:max_iterations),
+1689193176139:wp=c(results[[1]]$weighted_precision():results[[max_iterations]]$weighted_precision())
+1689193176139:)
+1689193179848:View(result_data)
+1689193460428:for (i in 1:max_iterations) {
+1689193460430:# Traing the model
+1689193460430:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689193460430:# Evaluate the model
+1689193460431:result <- ml_evaluate(model, df_split$test)
+1689193460432:# Save results
+1689193460432:results$wp[i] <- result$weighted_precision()
+1689193460433:results$wr[i] <- result$weighted_recall()
+1689193460433:results$a[i] <- result$accuracy()
+1689193460434:}
+1689193470290:results
+1689193512390:plot1 <- results %>%
+1689193512390:ggplot(aes(i, wp, color=wp)) +
+1689193512391:geom_line(linewidth=2) +
+1689193512391:scale_x_continuous(breaks=max_iterations) +
+1689193512392:scale_y_continuous(breaks=results$wp) +
+1689193512392:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689193512392:theme(text = element_text(size = 16)) +
+1689193512393:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689193595528:result_data <- do.call(rbind, results)
+1689193601957:# Plottin'
+1689193601959:plot1 <- result_data %>%
+1689193601959:ggplot(aes(i, wp, color=wp)) +
+1689193601959:geom_line(linewidth=2) +
+1689193601960:scale_x_continuous(breaks=max_iterations) +
+1689193601960:scale_y_continuous(breaks=results$wp) +
+1689193601961:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689193601961:theme(text = element_text(size = 16)) +
+1689193601962:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689193623330:# Sanity
+1689193623332:results
+1689193686261:# Plottin'
+1689193686262:plot1 <- results %>%
+1689193686263:ggplot(aes(i, wp, color=wp)) +
+1689193686263:geom_line(linewidth=2) +
+1689193686263:scale_x_continuous(breaks=1:max_iterations) +
+1689193686263:scale_y_continuous(breaks=results$wp) +
+1689193686264:scale_color_gradient(low = "#FF2266", high="#6622FF") +
+1689193686264:theme(text = element_text(size = 16)) +
+1689193686264:labs(x="Num of iterations", y="Precision", title = "a) Precision dependency on number of iterations")
+1689193698758:rlang::last_trace()
+1689193971435:for (i in 1:max_iterations) {
+1689193971437:# Traing the model
+1689193971437:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689193971438:# Evaluate the model
+1689193971438:result <- ml_evaluate(model, df_split$test)
+1689193971439:# Save results
+1689193971439:result_data$wp[i] <- result$weighted_precision()
+1689193971440:result_data$wr[i] <- result$weighted_recall()
+1689193971440:result_data$a[i] <- result$accuracy()
+1689193971441:}
+1689193985090:# Logistic regression with different max iterations
+1689193985091:max_iterations <- 5
+1689193987462:# Create empty data frame
+1689193987464:result_data <- data.frame(i = 1:max_iterations, wp = numeric(max_iterations), wr = numeric(max_iterations), a = numeric(max_iterations))
+1689193990083:for (i in 1:max_iterations) {
+1689193990085:# Traing the model
+1689193990085:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689193990086:# Evaluate the model
+1689193990087:result <- ml_evaluate(model, df_split$test)
+1689193990087:# Save results
+1689193990088:result_data$wp[i] <- result$weighted_precision()
+1689193990088:result_data$wr[i] <- result$weighted_recall()
+1689193990089:result_data$a[i] <- result$accuracy()
+1689193990089:}
+1689194003359:# Sanity
+1689194003361:result_data
+1689194009022:# Plotting
+1689194009023:plot1 <- result_data %>%
+1689194009024:ggplot(aes(i, wp, color = wp)) +
+1689194009024:geom_line(linewidth = 2) +
+1689194009024:scale_x_continuous(breaks = 1:max_iterations) +
+1689194009025:scale_y_continuous(breaks = result_data$wp) +
+1689194009025:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689194009026:theme(text = element_text(size = 16)) +
+1689194009026:labs(x = "Num of iterations", y = "Precision", title = "a) Precision dependency on number of iterations")
+1689194011017:plot1
+1689194087750:plot2 <- result_data %>%
+1689194087750:ggplot(aes(i, wp, color = wp)) +
+1689194087751:geom_line(linewidth = 2) +
+1689194087751:scale_x_continuous(breaks = 1:max_iterations) +
+1689194087752:scale_y_continuous(breaks = result_data$wr) +
+1689194087752:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689194087752:theme(text = element_text(size = 16)) +
+1689194087753:labs(x = "Num of iterations", y = "Recall", title = "a) Recall dependency on number of iterations")
+1689194089965:plot3 <- result_data %>%
+1689194089966:ggplot(aes(i, wp, color = wp)) +
+1689194089966:geom_line(linewidth = 2) +
+1689194089967:scale_x_continuous(breaks = 1:max_iterations) +
+1689194089967:scale_y_continuous(breaks = result_data$a) +
+1689194089967:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689194089968:theme(text = element_text(size = 16)) +
+1689194089968:labs(x = "Num of iterations", y = "Accuracy", title = "a) Accuracy dependency on number of iterations")
+1689194099287:plot2
+1689194101358:plot3
+1689194108365:plot1
+1689194111451:plot2
+1689194115049:plot3
+1689194117232:plot1
+1689194204370:for (i in 1:max_iterations) {
+1689194204371:# Traing the model
+1689194204372:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689194204372:# Evaluate the model
+1689194204372:result <- ml_evaluate(model, df_split$test)
+1689194204373:# Save results
+1689194204373:result_data$wp[i] <- result$weighted_precision()
+1689194204373:result_data$wr[i] <- result$weighted_recall()
+1689194204373:result_data$a[i] <- result$accuracy()
+1689194204373:result_data$roc[i] <- result$area_under_roc()
+1689194204374:}
+1689194224348:# Sanity
+1689194224350:result_data

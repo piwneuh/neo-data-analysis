@@ -82,10 +82,16 @@ formula <- can_be_seen ~ H + H_divd + diameter + albedo
 
 # Logistic regression with different max iterations
 max_iterations <- 5
-results <- vector("list", max_iterations)
+# Create empty data frame
+result_data <- data.frame(
+  i = 1:max_iterations, 
+  wp = numeric(max_iterations), 
+  wr = numeric(max_iterations), 
+  a = numeric(max_iterations),
+  roc = numeric(max_iterations)
+  )
 
 for (i in 1:max_iterations) {
-  
   # Traing the model
   model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
   
@@ -93,10 +99,49 @@ for (i in 1:max_iterations) {
   result <- ml_evaluate(model, df_split$test)
   
   # Save results
-  results[[i]] <- result
+  result_data$wp[i] <- result$weighted_precision()
+  result_data$wr[i] <- result$weighted_recall()
+  result_data$a[i] <- result$accuracy()
 }
 
-results[[1]]$weighted_recall()
+# Sanity
+result_data
+
+# Plotting Precision
+plot1 <- result_data %>%
+  ggplot(aes(i, wp, color = wp)) +
+  geom_line(linewidth = 2) +
+  scale_x_continuous(breaks = 1:max_iterations) +
+  scale_y_continuous(breaks = result_data$wp) +
+  scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+  theme(text = element_text(size = 16)) +
+  labs(x = "Num of iterations", y = "Precision", title = "a) Precision dependency on number of iterations")
+
+# Plotting Recall
+plot2 <- result_data %>%
+  ggplot(aes(i, wp, color = wp)) +
+  geom_line(linewidth = 2) +
+  scale_x_continuous(breaks = 1:max_iterations) +
+  scale_y_continuous(breaks = result_data$wr) +
+  scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+  theme(text = element_text(size = 16)) +
+  labs(x = "Num of iterations", y = "Recall", title = "a) Recall dependency on number of iterations")
+
+# Plotting Accuracy
+plot3 <- result_data %>%
+  ggplot(aes(i, wp, color = wp)) +
+  geom_line(linewidth = 2) +
+  scale_x_continuous(breaks = 1:max_iterations) +
+  scale_y_continuous(breaks = result_data$a) +
+  scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+  theme(text = element_text(size = 16)) +
+  labs(x = "Num of iterations", y = "Accuracy", title = "a) Accuracy dependency on number of iterations")
+
+# Display
+plot1
+plot2
+plot3
+
 
 # End the session
 #spark_disconnect(sc)
