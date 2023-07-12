@@ -500,3 +500,116 @@
 1689169003466:# Data split
 1689169003467:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
 1689169010706:df_split
+1689169400789:# Data split
+1689169400790:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689169402257:# Data split
+1689169402259:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689169463589:result <- ml_evaluate(m1, data_split$test)
+1689169481165:m1 <- ml_fit(model1, data_split$training)
+1689169490379:m1 <- ml_fit(model1, df_split$training)
+1689169600666:df_split <- sdf_with_column(df_split, "H", cast(col("H"), "struct<type:tinyint,size:int,indices:array<int>,values:array<double>>"))
+1689169691436:# Data split
+1689169691438:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689169696149:# Check the split out
+1689169696151:df_split
+1689170214265:# Type conversion for H
+1689170214266:df <- df %>%
+1689170214267:mutate(H = cast(H, "struct<type:tinyint,size:int,indices:array<int>,values:array<double>>"))
+1689170230534:# Regression
+1689170230536:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H"))
+1689170356980:# Type conversion for H
+1689170356982:df <- df %>%
+1689170356982:mutate(H = cast(H, "struct<type:tinyint,size:int,indices:array<int>,values:array<double>>"))
+1689170419817:# Type conversion for H
+1689170419819:df <- df %>%
+1689170419820:select(-H) %>%
+1689170419820:mutate(H = cast(col("H"), "struct<type:tinyint,size:int,indices:array<int>,values:array<double>>")) %>%
+1689170419821:select(H, everything())
+1689170468663:# Type conversion for H
+1689170468664:df <- df %>%
+1689170468664:mutate(H = alias(H, cast(H, "struct<type:tinyint,size:int,indices:array<int>,values:array<double>>")))
+1689170526184:# Type conversion for H
+1689170526186:df <- df %>%
+1689170526186:mutate(H = `H` %>% cast("struct<type:tinyint,size:int,indices:array<int>,values:array<double>>"))
+1689170565663:# Type conversion for H
+1689170565664:df <- df %>%
+1689170565665:mutate("H" =  "H" %>% cast("struct<type:tinyint,size:int,indices:array<int>,values:array<double>>"))
+1689170579598:# Data split
+1689170579600:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689170589489:# Check the split out
+1689170589491:df_split
+1689170601075:# Regression
+1689170601076:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H"))
+1689170614326:View(df_split)
+1689170617941:View(model1)
+1689170646156:# Traing the model
+1689170646157:m1 <- ml_fit(model1, df_split$training)
+1689170674716:# Regression
+1689170674717:model1 <- ml_logistic_regression(sc, label_col = "H", features_col = c("albedo"))
+1689170677475:# Traing the model
+1689170677477:m1 <- ml_fit(model1, df_split$training)
+1689170869358:# Regression
+1689170869360:model1 <- ml_logistic_regression(sc, label_col = "epoch", features_col = c("epoch_mjd"))
+1689170872214:# Traing the model
+1689170872216:m1 <- ml_fit(model1, df_split$training)
+1689171156949:# Show data
+1689171156950:kable(head(df, n=10L),
+1689171156951:col.names = c("diameter",
+1689171156951:"H",
+1689171156952:"albedo",
+1689171156952:"abs_mag_category",
+1689171156953:"size_category"),
+1689171156953:label = "Table view of filtered data",
+1689171156954:format = "html",
+1689171156954:align = "ccccc"
+1689171156955:)
+1689171211241:# Show data
+1689171211243:kable(head(df, n=10L),
+1689171211243:col.names = c("diameter",
+1689171211244:"H",
+1689171211244:"albedo",
+1689171211245:"abs_mag_category",
+1689171211245:"size_category"),
+1689171211245:label = "Table view of filtered data",
+1689171211246:format = "html",
+1689171211246:align = "ccccc"
+1689171211247:)
+1689171312754:# Show data
+1689171312756:kable(head(df, n = 10L),
+1689171312756:col.names = c("diameter",
+1689171312757:"H",
+1689171312757:"albedo",
+1689171312758:"abs_mag_category",
+1689171312758:"size_category"),
+1689171312758:caption = "Table view of filtered data",
+1689171312759:format = "html",
+1689171312759:align = "c"
+1689171312760:)
+1689171361005:# Show data
+1689171361007:kable(head(df, n = 10L),
+1689171361007:col.names = colnames(df),
+1689171361008:caption = "Table view of filtered data",
+1689171361008:format = "html",
+1689171361009:align = "c"
+1689171361009:)
+1689171634004:# Regression
+1689171634006:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter"))
+1689171636962:# Traing the model
+1689171636964:m1 <- ml_fit(model1, df_split$training)
+1689171715142:# Check the split out
+1689171715143:df_split
+1689171720791:View(model1)
+1689171727458:# Regression
+1689171727460:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter"))
+1689171737974:# Regression
+1689171737976:model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter", "H"))
+1689171748358:rlang::last_trace(
+1689171750022:)
+1689171995050:# Show data
+1689171995052:kable(head(df, n = 10L),
+1689171995052:col.names = colnames(df),
+1689171995053:caption = "Table view of filtered data",
+1689171995053:format = "html",
+1689171995054:align = "c"
+1689171995054:) %>%
+1689171995055:kableExtra::kable_styling(bootstrap_options = "bordered", full_width = F, font_size = 16)

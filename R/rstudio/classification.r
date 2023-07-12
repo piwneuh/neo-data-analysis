@@ -55,12 +55,28 @@ df <- df %>%
 # Sanity columns
 colnames(df)
 
-# Classification modeling
-# Regression
-model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("H"))
+# Show data
+kable(head(df, n = 10L),
+      col.names = colnames(df),
+      caption = "Table view of filtered data",
+      format = "html",
+      align = "c"
+)
 
 # Data split
 df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+
+# Check the split out
 df_split
+
+# Regression
+model1 <- ml_logistic_regression(sc, label_col = "albedo", features_col = c("diameter", "H"))
+
+# Traing the model
+m1 <- ml_fit(model1, df_split$training)
+
+# Evaluate the model
+result <- ml_evaluate(model1, data_split$test)
+
 # End the session
 #spark_disconnect(sc)
