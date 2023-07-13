@@ -2958,3 +2958,219 @@
 1689204488146:cplot_20
 1689204494096:# End the session
 1689204494097:spark_disconnect(sc)
+1689234168261:install.packages("tidyverse", repos = "https://cran.rstudio.com/")
+1689234719776:install.packages("sparklyr", repos="https://cran.rstudio.com")
+1689234966669:library(sparklyr)
+1689234967894:library(dplyr)
+1689234967930:library(tidyr)
+1689234967943:library(ggplot2)
+1689234968093:library(magrittr)
+1689234968106:library(knitr)
+1689234971063:# Install
+1689234971065:spark_install()
+1689234973752:# Connect
+1689234973752:sc <- sparklyr::spark_connect(master = "local")
+1689234990790:datasetPath <- "/data/dataset.csv"
+1689234991409:df <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689235006180:# Filter data
+1689235006181:df <- df %>%
+1689235006182:filter(!(is.na(H) || is.na(epoch) || is.na(diameter) || is.na(diameter_sigma))) %>%
+1689235006183:mutate(albedo = ifelse(is.na(albedo), 0, albedo))
+1689235007185:# Check how much is lost
+1689235007187:count(df)
+1689235010179:# Create a new column that categorizes asteroids into different brightness categories based on their absolute magnitude (H)
+1689235010181:df <- df %>%
+1689235010181:mutate(brightness = case_when(
+1689235010182:albedo < 0.25 ~ "Can't be seen",
+1689235010183:albedo >= 0.25 ~ "Moderately Bright",
+1689235010183:TRUE ~ "Can't be seen"
+1689235010184:))
+1689235011485:# Create a new column
+1689235011486:df <- df %>%
+1689235011487:mutate(can_be_seen = case_when(
+1689235011488:albedo < 0.25 ~ 0,
+1689235011488:albedo >= 0.25 ~ 1,
+1689235011489:TRUE ~ 0
+1689235011489:))
+1689235012530:# H devided by 5 (needed for formula)
+1689235012531:df <- df %>%
+1689235012532:mutate(H_divd = H / 5)
+1689235013754:# Sanity columns
+1689235013756:colnames(df)
+1689235015334:# Select most relevant data for further analising
+1689235015336:df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_seen, brightness)
+1689235016736:# Just in case
+1689235016737:df <- na.omit(df)
+1689235022569:# Show selected data
+1689235022571:kable(head(df, n = 10L),
+1689235022571:col.names = colnames(df),
+1689235022571:caption = "Table view of filtered data",
+1689235022572:format = "html",
+1689235022572:align = "c"
+1689235022572:)
+1689235067469:# Data split
+1689235067470:df_split <- sdf_random_split(df, training = 0.7, test = 0.3)
+1689235073597:# Check the split out
+1689235073599:df_split
+1689235077318:# Formula
+1689235077320:formula <- can_be_seen ~ H + H_divd + diameter + albedo
+1689235084544:# Logistic regression with different max iterations
+1689235084544:max_iterations <- 5
+1689235087347:# Create empty data frame
+1689235087349:result_data <- data.frame(
+1689235087349:i = 1:max_iterations,
+1689235087350:wp = numeric(max_iterations),
+1689235087350:wr = numeric(max_iterations),
+1689235087351:a = numeric(max_iterations),
+1689235087351:f1 = numeric(max_iterations)
+1689235087352:)
+1689235089775:for (i in 1:max_iterations) {
+1689235089776:# Traing the model
+1689235089777:model <- ml_logistic_regression(df_split$training, formula, max_iter = i, family = "binomial")
+1689235089778:# Evaluate the model
+1689235089779:result <- ml_evaluate(model, df_split$test)
+1689235089780:# Save results
+1689235089780:result_data$wp[i] <- result$weighted_precision()
+1689235089781:result_data$wr[i] <- result$weighted_recall()
+1689235089782:result_data$a[i] <- result$accuracy()
+1689235089782:result_data$f1[i] <- result$weighted_f_measure()
+1689235089783:}
+1689235113132:# Sanity
+1689235113132:result_data
+1689235113221:# Plotting Precision
+1689235113221:plot1 <- result_data %>%
+1689235113222:ggplot(aes(i, wp, color = wp)) +
+1689235113222:geom_line(linewidth = 2) +
+1689235113223:scale_x_continuous(breaks = 1:max_iterations) +
+1689235113223:scale_y_continuous(breaks = result_data$wp) +
+1689235113224:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689235113225:theme(text = element_text(size = 16)) +
+1689235113225:labs(x = "Num of iterations", y = "Precision", title = "a) Precision dependency on number of iterations")
+1689235117410:# Plotting Recall
+1689235117411:plot2 <- result_data %>%
+1689235117412:ggplot(aes(i, wp, color = wp)) +
+1689235117413:geom_line(linewidth = 2) +
+1689235117413:scale_x_continuous(breaks = 1:max_iterations) +
+1689235117414:scale_y_continuous(breaks = result_data$wr) +
+1689235117414:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689235117415:theme(text = element_text(size = 16)) +
+1689235117415:labs(x = "Num of iterations", y = "Recall", title = "a) Recall dependency on number of iterations")
+1689235118060:# Plotting Accuracy
+1689235118061:plot3 <- result_data %>%
+1689235118062:ggplot(aes(i, wp, color = wp)) +
+1689235118063:geom_line(linewidth = 2) +
+1689235118063:scale_x_continuous(breaks = 1:max_iterations) +
+1689235118064:scale_y_continuous(breaks = result_data$a) +
+1689235118064:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689235118065:theme(text = element_text(size = 16)) +
+1689235118065:labs(x = "Num of iterations", y = "Accuracy", title = "a) Accuracy dependency on number of iterations")
+1689235118634:# Plotting F1
+1689235118636:plot4 <- result_data %>%
+1689235118637:ggplot(aes(i, wp, color = wp)) +
+1689235118637:geom_line(linewidth = 2) +
+1689235118638:scale_x_continuous(breaks = 1:max_iterations) +
+1689235118638:scale_y_continuous(breaks = result_data$f1) +
+1689235118639:scale_color_gradient(low = "#FF2266", high = "#6622FF") +
+1689235118639:theme(text = element_text(size = 16)) +
+1689235118640:labs(x = "Num of iterations", y = "F1", title = "a) F1 score dependency on number of iterations")
+1689235120004:# Display
+1689235120006:plot1
+1689235145884:plot2
+1689235161952:plot3
+1689235172268:plot4
+1689235188716:# Reaffirm formula
+1689235188717:formula <- can_be_seen ~ H + H_divd + diameter + albedo
+1689235192268:# Bayes classification
+1689235192270:bayes_model <- df_split$training %>% ml_naive_bayes(formula)
+1689235196536:# Linear SVC classification
+1689235196537:linear_svc_model <- df_split$training %>%
+1689235196537:ml_linear_svc(formula)
+1689235254266:# Decision 3 classification
+1689235254267:decision_tree_classifier <- df_split$training %>%
+1689235254268:ml_decision_tree_classifier(formula)
+1689235263208:# Testing Accuracy Score for different methods using test dataset
+1689235263209:bayes_accuracy <- ml_evaluate(bayes_model, df_split$test)$Accuracy
+1689235265006:svc_accuracy <- ml_evaluate(linear_svc_model, df_split$test)$Accuracy
+1689235268220:d3_accuracy <- ml_evaluate(decision_tree_classifier, df_split$test)$Accuracy
+1689235278521:# Testing Accuracy Score for different methods using 4-cross validation
+1689235278523:k4c <- function(dataset, model, formula){
+1689235278523:dataset <- dataset %>%
+1689235278524:sdf_random_split(seed=1,
+1689235278525:s1=0.25,
+1689235278525:s2=0.25,
+1689235278526:s3=0.25,
+1689235278526:s4=0.25)
+1689235278527:training <- list(
+1689235278527:s1 = sdf_bind_rows(dataset$s2, dataset$s3, dataset$s4),
+1689235278528:s2 = sdf_bind_rows(dataset$s1, dataset$s3, dataset$s4),
+1689235278529:s3 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s4),
+1689235278529:s4 = sdf_bind_rows(dataset$s1, dataset$s2, dataset$s3)
+1689235278530:)
+1689235278531:trained = list(s1=model(training$s1, formula),
+1689235278532:s2=model(training$s2, formula),
+1689235278532:s3=model(training$s3, formula),
+1689235278533:s4=model(training$s4, formula)
+1689235278534:)
+1689235278535:accuracy <- (ml_evaluate(trained$s1, dataset$s1)$Accuracy +
+1689235278536:ml_evaluate(trained$s2, dataset$s2)$Accuracy +
+1689235278537:ml_evaluate(trained$s3, dataset$s3)$Accuracy +
+1689235278537:ml_evaluate(trained$s4, dataset$s4)$Accuracy
+1689235278538:) / 4
+1689235278539:}
+1689235281574:bayes_k4_accuracy <- k4c(df, ml_naive_bayes, formula)
+1689235305426:svc_k4_accuracy <- k4c(df, ml_linear_svc, formula)
+1689235597260:d3_k4_accuracy <- k4c(df, ml_decision_tree_classifier, formula)
+1689235668382:# Table View
+1689235668383:knitr::kable(array(c("Bayes", "SVC", "Decision Tree",
+1689235668383:bayes_accuracy, svc_accuracy, d3_accuracy,
+1689235668384:bayes_k4_accuracy, svc_k4_accuracy, d3_accuracy),
+1689235668384:dim = c(3, 3)),
+1689235668384:col.names = c("Models", "Accuracy", "4-Cross Accuracy"),
+1689235668384:label = "Comparing accuracy of different models",
+1689235668385:align = "ccc",
+1689235668385:format = "html"
+1689235668385:)
+1689235721667:# Clusterizatio dataset
+1689235721685:df_clusterization <- spark_read_csv(sc, name = "neo_data", path = datasetPath, header = TRUE, infer_schema = TRUE)
+1689235728931:# Filter clusterization data
+1689235728932:df_clusterization <- df_clusterization %>%
+1689235728932:filter(!(is.na(diameter) || is.na(e)))
+1689235732084:# Create a new column that categorizes asteroids into different size categories based on their diameter (km)
+1689235732086:df_clusterization <- df_clusterization %>%
+1689235732086:mutate(size_category = case_when(
+1689235732086:diameter < 1 ~ "Small",
+1689235732086:diameter >= 1 & diameter < 5 ~ "Medium",
+1689235732086:diameter >= 5 & diameter < 10 ~ "Large",
+1689235732087:diameter >= 10 ~ "X-Large",
+1689235732087:TRUE ~ "Unknown"
+1689235732087:))
+1689235735503:# Select columns relevant for clusterizations
+1689235735504:df_clusterization <- df_clusterization %>% select(diameter, e, size_category)
+1689235737458:# New Formula
+1689235737460:cluster_formula <- size_category ~ diameter + e
+1689235738661:# K-means 5
+1689235738662:model_5 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 5)
+1689235743243:cplot_5 <- model_5$centers %>%
+1689235743246:ggplot(aes(diameter, e, color=e)) +
+1689235743247:geom_point(size=5) +
+1689235743247:scale_color_gradientn(colors = rainbow(10)) +
+1689235743247:theme(text = element_text(size=16)) +
+1689235743248:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=5-means")
+1689235744949:model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 10)
+1689235749419:cplot_10 <- model_10$centers %>%
+1689235749421:ggplot(aes(diameter, e, color=e)) +
+1689235749421:geom_point(size=5) +
+1689235749422:scale_color_gradientn(colors = rainbow(10)) +
+1689235749422:theme(text = element_text(size=16)) +
+1689235749423:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=10-means")
+1689235750810:model_20 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
+1689235754836:cplot_20 <- model_20$centers %>%
+1689235754837:ggplot(aes(diameter, e, color=e)) +
+1689235754838:geom_point(size=5) +
+1689235754839:scale_color_gradientn(colors = rainbow(10)) +
+1689235754839:theme(text = element_text(size=16)) +
+1689235754840:labs(x="diameter", y="Eccentricity (shape)", title = "a) K=20-means")
+1689235756562:# Plotin'
+1689235756563:cplot_5
+1689235766878:cplot_10
+1689235776182:cplot_20

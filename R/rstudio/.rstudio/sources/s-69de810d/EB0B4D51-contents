@@ -69,7 +69,125 @@ df <- df %>% select(albedo, H, H_divd, diameter, diameter_sigma, epoch, can_be_s
 df <- na.omit(df)
 ```
 
-// TODO: DATA TABLE
+<table>
+      <caption>
+        Table view of filtered data
+      </caption>
+      <thead>
+        <tr>
+          <th style="text-align: center">albedo</th>
+          <th style="text-align: center">H</th>
+          <th style="text-align: center">H_divd</th>
+          <th style="text-align: center">diameter</th>
+          <th style="text-align: center">diameter_sigma</th>
+          <th style="text-align: center">epoch</th>
+          <th style="text-align: center">can_be_seen</th>
+          <th style="text-align: center">brightness</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center">0.0900</td>
+          <td style="text-align: center">3.40</td>
+          <td style="text-align: center">0.680</td>
+          <td style="text-align: center">939.400</td>
+          <td style="text-align: center">0.200</td>
+          <td style="text-align: center">2458600</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.1010</td>
+          <td style="text-align: center">4.20</td>
+          <td style="text-align: center">0.840</td>
+          <td style="text-align: center">545.000</td>
+          <td style="text-align: center">18.000</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.2140</td>
+          <td style="text-align: center">5.33</td>
+          <td style="text-align: center">1.066</td>
+          <td style="text-align: center">246.596</td>
+          <td style="text-align: center">10.594</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.4228</td>
+          <td style="text-align: center">3.00</td>
+          <td style="text-align: center">0.600</td>
+          <td style="text-align: center">525.400</td>
+          <td style="text-align: center">0.200</td>
+          <td style="text-align: center">2458600</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">Moderately Bright</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.2740</td>
+          <td style="text-align: center">6.90</td>
+          <td style="text-align: center">1.380</td>
+          <td style="text-align: center">106.699</td>
+          <td style="text-align: center">3.140</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">Moderately Bright</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.2679</td>
+          <td style="text-align: center">5.80</td>
+          <td style="text-align: center">1.160</td>
+          <td style="text-align: center">185.180</td>
+          <td style="text-align: center">2.900</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">Moderately Bright</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.2766</td>
+          <td style="text-align: center">5.60</td>
+          <td style="text-align: center">1.120</td>
+          <td style="text-align: center">199.830</td>
+          <td style="text-align: center">10.000</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">Moderately Bright</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.2260</td>
+          <td style="text-align: center">6.50</td>
+          <td style="text-align: center">1.300</td>
+          <td style="text-align: center">147.491</td>
+          <td style="text-align: center">1.025</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.0717</td>
+          <td style="text-align: center">5.50</td>
+          <td style="text-align: center">1.100</td>
+          <td style="text-align: center">407.120</td>
+          <td style="text-align: center">6.800</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">0.1910</td>
+          <td style="text-align: center">6.50</td>
+          <td style="text-align: center">1.300</td>
+          <td style="text-align: center">142.887</td>
+          <td style="text-align: center">1.008</td>
+          <td style="text-align: center">2459000</td>
+          <td style="text-align: center">0</td>
+          <td style="text-align: center">Can't be seen</td>
+        </tr>
+      </tbody>
+    </table>
 
 ## Preparing data for classification
 ```
@@ -107,8 +225,17 @@ for (i in 1:max_iterations) {
 ```
 
 ## Ploting how the number of iterations affects performance of the model
-//TODO: PLOTS
+a) Precision
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/plot1.png
 
+b) Recall
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/plot2.png
+
+c) Accuracy
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/plot3.png
+
+d) F1
+file://home/piwneuh/Projects/neo-data-analysis/R/rstudio/plot4.png
 
 ## Checking other models: Naive Bayes, Linear SVC, Decision Tree Classification
 ```
@@ -166,7 +293,32 @@ bayes_k4_accuracy <- k4c(df, ml_naive_bayes, formula)
 svc_k4_accuracy <- k4c(df, ml_linear_svc, formula)
 d3_k4_accuracy <- k4c(df, ml_decision_tree_classifier, formula)
 ```
-//TODO: TABLE
+<table>
+      <thead>
+        <tr>
+          <th style="text-align: center">Models</th>
+          <th style="text-align: center">Accuracy</th>
+          <th style="text-align: center">4-Cross Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center">Bayes</td>
+          <td style="text-align: center">0.78561222760962</td>
+          <td style="text-align: center">0.780773854003836</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">SVC</td>
+          <td style="text-align: center">0.990171375575685</td>
+          <td style="text-align: center">0.991407273209689</td>
+        </tr>
+        <tr>
+          <td style="text-align: center">Decision Tree</td>
+          <td style="text-align: center">0.98336084417646</td>
+          <td style="text-align: center">0.98336084417646</td>
+        </tr>
+      </tbody>
+    </table>
 
 ## Clusterization: getting the data ready
 ```
@@ -202,7 +354,14 @@ model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 10)
 model_10 <- ml_kmeans(df_clusterization, cluster_formula, seed = 1, k = 20)
 ```
 
-//TODO: PLOTS
+a) K-Means (5)
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/cplot5.png
+
+b) K-Means (10)
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/cplot10.png
+
+c) K-Means (20)
+file:///home/piwneuh/Projects/neo-data-analysis/R/rstudio/cplot20.png
 
 ## Finally, disconect from spark
 ```
